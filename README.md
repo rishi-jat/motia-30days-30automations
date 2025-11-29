@@ -1,182 +1,73 @@
 # 30 Days of Motia Automation 🚀
 
-Hey! I'm taking on a 30-day challenge to master [Motia](https://motia.dev) by building real automation projects. No tutorials, no todo apps - just practical backend systems that actually do something useful.
+I'm challenging myself to build 30 real-world automation projects in 30 days using [Motia](https://motia.dev).
 
-## What's Motia?
+The goal isn't just to write code, but to actually understand how to build scalable, event-driven backends without getting bogged down in boilerplate. I'm converting a lot of my old n8n workflows into proper code because I want more control and better error handling.
 
-It's this cool open-source framework that unifies everything you need for backend work - APIs, background jobs, queues, state management, and more. Think of it as a single tool that replaces your entire backend stack.
+## Progress
 
-## The Challenge
-
-Build 30 automation projects in 30 days. Each day, I'm converting n8n workflows or building new integrations from scratch using Motia. The goal is to get really good at event-driven architecture and understand how production backends actually work.
-
-## Progress So Far
-
-| Day | What I Built | Status |
-|-----|--------------|--------|
-| **1** | GitHub → Discord Release Notifier | ✅ Done |
-| **2-30** | Coming up... | 🔜 |
+| Day | Project | Status |
+|-----|---------|--------|
+| **1** | GitHub → Discord Notifier | ✅ Done |
+| **2-30** | *Cooking...* | 🔜 |
 
 ---
 
 ## Day 1: GitHub Release Notifier
 
-**Took:** ~4 hours | **Difficulty:** Medium | **Status:** Working! ✅
+I started with something I actually needed. I maintain a few repos and I hate manually checking for releases or relying on email spam. I wanted a clean Discord notification whenever a new release drops.
 
-### The Idea
+### How it works
 
-You know how annoying it is to manually check GitHub for new releases? I built a system that watches GitHub releases and instantly sends a nice formatted message to Discord. Originally an n8n workflow, but I rebuilt it properly in Motia.
+It's a pretty straightforward event-driven flow:
+1. GitHub hits my webhook endpoint
+2. The API validates the payload (so nothing crashes if GitHub changes something)
+3. It emits an event internally
+4. A background worker picks that up and formats a nice Discord embed
 
-### What It Does
+### The Stack
 
-```
-GitHub sends webhook → My API catches it → Emits event → Discord gets notified
-```
+- **Motia** (obviously)
+- **TypeScript**
+- **Zod** for validation (lifesaver)
+- **Discord Webhooks**
 
-Pretty simple flow, but I went all in on the implementation:
+### What I learned today
 
-**The Good Stuff:**
-- Receives GitHub webhooks at `/github/webhook`
-- Validates everything with Zod (no bad data gets through)
-- Processes notifications in the background (fast API responses!)
-- Sends beautiful Discord embeds with release info
-- Has proper error handling (it actually tells you what went wrong)
-- Follows DDD patterns (services, clean architecture, all that)
+Honestly, the coolest part was the error handling. I set up this middleware that catches everything - validation errors, custom logic errors, you name it. It feels way more robust than my old low-code setup where things would just silently fail.
 
-**Tech I Used:**
-- Motia (obviously)
-- TypeScript because I like my types
-- Zod for validation
-- Discord Webhooks API
+Also, structuring it with Domain-Driven Design (DDD) felt like overkill at first for a simple notifier, but now that I see the code, it's super clean. The logic is separated from the API handlers, which makes testing way easier.
 
-### The Code Structure
+### Running it
 
-I organized it properly this time:
-
-```
-Day-1/
-├── src/
-│   ├── errors/              # Custom error classes (BaseError, etc.)
-│   ├── middlewares/         # Error catching middleware
-│   └── services/discord/    # Discord integration service
-├── steps/
-│   └── github-release-notifier/
-│       ├── github-webhook.step.ts      # Receives webhooks
-│       └── discord-notification.step.ts # Sends to Discord
-└── README.md
-```
-
-### What I Learned
-
-1. **Error handling is crucial** - Built custom error classes and middleware that catches everything (ZodError, custom errors, generic exceptions)
-2. **DDD actually makes sense** - Separating services from steps keeps things clean
-3. **Event-driven is powerful** - API responds instantly, Discord notification happens in background
-4. **Motia's patterns are solid** - Their `.mdc` documentation files are gold
-
-### Try It Yourself
+If you want to try it out:
 
 ```bash
 cd Day-1
 npm install
-
-# Add your Discord webhook
-echo 'DISCORD_WEBHOOK_URL=your_webhook' > .env
-
+# You'll need a Discord webhook URL in your .env file
 npm run dev
-
-# Test it
-curl -X POST http://localhost:3000/github/webhook \
-  -H "Content-Type: application/json" \
-  -d @test-payload.json
 ```
 
-Check the `Day-1/` folder for detailed setup instructions.
+Check the `Day-1` folder for the full code.
 
 ---
 
-## What's Next?
+## What's coming next?
 
-I'm planning to build:
+I'm not 100% sure what I'll build for the rest of the month, but I'm thinking about:
+- Slack bots
+- Email automation
+- Maybe some cron jobs for data scraping?
+- Real-time dashboards
 
-**Days 2-10:** Different integrations
-- Slack notifications
-- Email automations  
-- Tweet schedulers
-- Whatever seems useful
+If you have ideas, let me know!
 
-**Days 11-20:** Real-time stuff
-- WebSocket connections
-- Live data streams
-- Chat systems
+## Connect with me
 
-**Days 21-30:** Production-ready apps
-- Deployment setups
-- Monitoring
-- Complex workflows
-
-Haven't planned everything yet - I'm figuring it out as I go. If you have ideas, open an issue!
-
-## Tech Stack
-
-**Framework:** Motia  
-**Language:** TypeScript (might try Python for some days)  
-**Validation:** Zod  
-**Architecture:** Event-driven, DDD patterns
-
-**Integrations so far:**
-- ✅ Discord
-- ✅ GitHub Webhooks
-- More coming...
-
-## Run Any Day
-
-Each day is independent:
-
-```bash
-cd Day-X
-npm install
-npm run dev
-```
-
-Check each day's README for specific setup.
-
-## Learning Resources
-
-Stuff that's been helpful:
-- [Motia Docs](https://motia.dev/docs) - Actually good documentation
-- [Motia Discord](https://discord.gg/motia) - Helpful community
-- The `.mdc` files in each project - Architectural patterns
-
-## The Repo
-
-```
-motia-30days-30automations/
-├── Day-1/    # GitHub → Discord
-├── Day-2/    # TBD
-├── Day-3/    # TBD
-...
-└── Day-30/   # Final project
-```
-
-## About Me
-
-I'm Rishi, learning backend development by building real stuff. Find me:
+I'm documenting this whole journey here and on my socials:
 - GitHub: [@rishi-jat](https://github.com/rishi-jat)
 - Twitter: [@rishixtwt](https://twitter.com/rishixtwt)
 - LinkedIn: [rishi-jat](https://linkedin.com/in/rishi-jat-496245320)
 
-## Contributing
-
-This is my personal learning journey, but:
-- ⭐ Star if you find it useful
-- 🐛 Open issues if something's broken
-- 💡 Suggest automation ideas
-- 🍴 Fork and build your own version
-
-## License
-
-MIT - do whatever you want with it
-
----
-
-**Building with [Motia](https://motia.dev) · One automation at a time**
+Feel free to fork this and follow along if you want to learn Motia too!
