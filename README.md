@@ -1,73 +1,143 @@
 # 30 Days of Motia Automation 🚀
 
-I'm challenging myself to build 30 real-world automation projects in 30 days using [Motia](https://motia.dev).
+This repository is my personal challenge to build **30 real-world, production‑ready backend automations in 30 days** using [Motia](https://motia.dev).  
+Everything here is built with ❤️ by Rishi — using Motia, TypeScript, clean architecture, and an event‑driven mindset.
 
-The goal isn't just to write code, but to actually understand how to build scalable, event-driven backends without getting bogged down in boilerplate. I'm converting a lot of my old n8n workflows into proper code because I want more control and better error handling.
-
-## Progress
-
-| Day | Project | Status |
-|-----|---------|--------|
-| **1** | GitHub → Discord Notifier | ✅ Done |
-| **2-30** | *Cooking...* | 🔜 |
+The goal is simple:  
+**Turn ideas and old n8n workflows into scalable, testable, maintainable backends — one day at a time.**
 
 ---
 
-## Day 1: GitHub Release Notifier
+## 🌟 Progress Tracker
 
-I started with something I actually needed. I maintain a few repos and I hate manually checking for releases or relying on email spam. I wanted a clean Discord notification whenever a new release drops.
+| Day | Project | Status |
+|-----|---------|--------|
+| **1** | GitHub Release → Discord Notifier | ✅ Completed |
+| **2–30** | Coming Soon | 🔜 |
 
-### How it works
+Each day lives in its own folder:
 
-It's a pretty straightforward event-driven flow:
-1. GitHub hits my webhook endpoint
-2. The API validates the payload (so nothing crashes if GitHub changes something)
-3. It emits an event internally
-4. A background worker picks that up and formats a nice Discord embed
+```
+Day-1/
+Day-2/
+...
+Day-30/
+```
 
-### The Stack
+---
 
-- **Motia** (obviously)
+# 🧩 Day 1 — GitHub Release Notifier
+
+For the first automation, I rebuilt an old n8n workflow as a proper backend service in Motia.
+
+### 🔥 What it does
+
+Whenever a GitHub repository publishes a new release:
+
+1. GitHub sends a webhook  
+2. Motia’s API step receives and validates it using Zod  
+3. An internal event `github-release-published` is emitted  
+4. An event step listens, formats a rich Discord embed, and sends the notification  
+
+This replaces noisy emails + unreliable no‑code triggers with a **clean, fast, scalable event-driven backend**.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Motia** (API Steps, Event Steps, Flow Orchestration)
 - **TypeScript**
-- **Zod** for validation (lifesaver)
+- **Zod** (runtime-safe validation)
+- **Domain-Driven Design Services**
+- **Custom Error Middleware**
 - **Discord Webhooks**
 
-### What I learned today
+---
 
-Honestly, the coolest part was the error handling. I set up this middleware that catches everything - validation errors, custom logic errors, you name it. It feels way more robust than my old low-code setup where things would just silently fail.
+## 📚 What I Learned on Day 1
 
-Also, structuring it with Domain-Driven Design (DDD) felt like overkill at first for a simple notifier, but now that I see the code, it's super clean. The logic is separated from the API handlers, which makes testing way easier.
+### ✔ Event-driven design is incredibly powerful  
+API stays fast; background workers handle all heavy lifting.
 
-### Running it
+### ✔ Motia + AI accelerates backend development  
+Paste JSON → scaffold → refine → ship.
 
-If you want to try it out:
+### ✔ Clean architecture pays off  
+Separating services, steps, validations, and middleware makes the automation genuinely maintainable.
+
+### ✔ This is miles better than the old n8n workflow  
+More control, better errors, easier to read, easier to test.
+
+Made with ❤️ by Rishi.
+
+---
+
+## ▶️ Running the Day‑1 Automation
 
 ```bash
 cd Day-1
 npm install
-# You'll need a Discord webhook URL in your .env file
 npm run dev
 ```
 
-Check the `Day-1` folder for the full code.
+Create a `.env` file:
+
+```
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN
+```
+
+### Test it using curl:
+
+```bash
+curl -X POST http://localhost:3000/github/webhook \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "published",
+    "release": {
+      "name": "v1.0.0",
+      "body": "Initial release",
+      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.0.0"
+    },
+    "repository": {
+      "full_name": "vercel/next.js"
+    }
+  }'
+```
+
+You’ll instantly see the formatted message in your Discord channel.
 
 ---
 
-## What's coming next?
+# 🚀 What’s Coming Next (Days 2–30)
 
-I'm not 100% sure what I'll build for the rest of the month, but I'm thinking about:
-- Slack bots
-- Email automation
-- Maybe some cron jobs for data scraping?
-- Real-time dashboards
+I'm exploring:
 
-If you have ideas, let me know!
+- Slack and Discord bots  
+- Email automation  
+- Cron-based pipelines  
+- Real-time data dashboards  
+- GitHub automation tools  
+- AI-powered workflows  
+- Multi-step backend flows  
+- Monitoring + audit pipelines  
 
-## Connect with me
+If you have ideas, DM me — I’d love to build them.
 
-I'm documenting this whole journey here and on my socials:
-- GitHub: [@rishi-jat](https://github.com/rishi-jat)
-- Twitter: [@rishixtwt](https://twitter.com/rishixtwt)
-- LinkedIn: [rishi-jat](https://linkedin.com/in/rishi-jat-496245320)
+---
 
-Feel free to fork this and follow along if you want to learn Motia too!
+## 🔗 Follow the Journey
+
+Daily updates here and on socials:
+
+- GitHub: https://github.com/rishi-jat  
+- X (Twitter): https://twitter.com/rishixtwt  
+- LinkedIn: https://linkedin.com/in/rishi-jat-496245320  
+
+**Hashtag:** `#30days30automations`
+
+---
+
+## ❤️ Made by Rishi — Powered by Motia  
+This challenge is helping me grow, experiment, and understand scalable backend systems deeply.  
+Day 1 done.  
+Day 2 loading…
