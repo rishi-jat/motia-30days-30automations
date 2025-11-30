@@ -29,143 +29,29 @@ Day-30/
 
 # 🧩 Day 1 — GitHub Release Notifier
 
-For the first automation, I rebuilt an old n8n workflow as a proper backend service in Motia.
-
-### 🔥 What it does
-
-Whenever a GitHub repository publishes a new release:
-
-1. GitHub sends a webhook  
-2. Motia’s API step receives and validates it using Zod  
-3. An internal event `github-release-published` is emitted  
-4. An event step listens, formats a rich Discord embed, and sends the notification  
-
-This replaces noisy emails + unreliable no‑code triggers with a **clean, fast, scalable event-driven backend**.
-
----
-
-## 🛠️ Tech Stack
-
-- **Motia** (API Steps, Event Steps, Flow Orchestration)
-- **TypeScript**
-- **Zod** (runtime-safe validation)
-- **Domain-Driven Design Services**
-- **Custom Error Middleware**
-- **Discord Webhooks**
-
----
-
-## 📚 What I Learned on Day 1
-
-### ✔ Event-driven design is incredibly powerful  
-API stays fast; background workers handle all heavy lifting.
-
-### ✔ Motia + AI accelerates backend development  
-Paste JSON → scaffold → refine → ship.
-
-### ✔ Clean architecture pays off  
-Separating services, steps, validations, and middleware makes the automation genuinely maintainable.
-
-### ✔ This is miles better than the old n8n workflow  
-More control, better errors, easier to read, easier to test.
-
-Made with ❤️ by Rishi.
-
----
-
-## ▶️ Running the Day‑1 Automation
-
-```bash
-cd Day-1
-npm install
-npm run dev
-```
-
-Create a `.env` file:
-
-```
-DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN
-```
-
-### Test it using curl:
-
-```bash
-curl -X POST http://localhost:3000/github/webhook \
-  -H "Content-Type: application/json" \
-  -d '{
-    "action": "published",
-    "release": {
-      "name": "v1.0.0",
-      "body": "Initial release",
-      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.0.0"
-    },
-    "repository": {
-      "full_name": "vercel/next.js"
-    }
-  }'
-```
-
-You’ll instantly see the formatted message in your Discord channel.
-
----
-
-# 🚀 What’s Coming Next (Days 2–30)
-
-I'm exploring:
-
-- Slack and Discord bots  
-- Email automation  
-- Cron-based pipelines  
-- Real-time data dashboards  
-- GitHub automation tools  
-- AI-powered workflows  
-- Multi-step backend flows  
-- Monitoring + audit pipelines  
-
-If you have ideas, DM me — I’d love to build them.
-
----
-
-Check the `Day-1` folder for the full code.
-
----
-
-## Day 2: GitHub Issue Label → Slack Notifier
-
-Similar to Day 1, but this time I'm watching for when issues get labeled on GitHub and sending that to Slack instead of Discord.
-
-### The Flow
-
-```
-GitHub issues.labeled → API validates it → Event emits → Slack gets notified
-```
+For the first automation, I rebuilt an old n8n workflow as a proper backend service.
 
 ### What I Built
+A simple flow that listens for `release.published` webhooks from GitHub and posts them to Discord. It replaces my flaky no-code setup with something that actually validates data before acting on it.
 
-- **API Endpoint** at `/github/issue-labeled` that receives GitHub webhooks
-- **Event Handler** that formats and sends Slack attachments
-- **Slack Service** with proper DDD structure (just like the Discord one from Day 1)
-- **Error Handling** using the same middleware pattern
-
-### Stack
-
-- Motia
-- TypeScript
-- Zod validation
-- Slack Webhooks API
-
-### What's Different from Day 1?
-
-Not much! That's kinda the point - I'm getting comfortable with the Motia patterns. The main difference is:
-- Slack uses "attachments" instead of Discord's "embeds"
-- Different webhook payload structure from GitHub (issues vs releases)
-- Different environment variable (`SLACK_WEBHOOK_URL`)
-
-The architecture is identical though - API step emits event, event step handles notification. Clean separation of concerns.
-
-Check `Day-2` folder for the code.
+[Check out the Day 1 code](./Day-1)
 
 ---
+
+# 🛠️ Day 2 — GitHub Issue Labels → Slack
+
+Day 1 was about getting it working. Day 2 was about **making it bulletproof**.
+
+### What I Built
+A multi-event workflow that handles GitHub Issues.
+- **Labels:** If you tag an issue as "bug", it pings Slack in RED. "Feature" gets ORANGE.
+- **Comments:** It also listens for new comments and notifies the team.
+
+### The Focus: Production Safety
+I spent most of the time ensuring this **never crashes**. GitHub sends a lot of random events, and if you don't check for missing fields, your server dies. I implemented "defensive parsing" and graceful degradation (so if one part fails, the rest still works).
+
+[Check out the Day 2 code](./Day-2)
+
 
 ## 🔗 Follow the Journey
 
