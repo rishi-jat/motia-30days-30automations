@@ -12,8 +12,9 @@ The goal is simple:
 
 | Day | Project | Status |
 |-----|---------|--------|
-| **1** | GitHub Release → Discord Notifier | ✅ Completed |
-| **2–30** | Coming Soon | 🔜 |
+| **1** | GitHub → Discord Notifier | ✅ Done |
+| **2** | GitHub Issue Labels → Slack | ✅ Done |
+| **3-30** | *Cooking...* | 🔜 |
 
 Each day lives in its own folder:
 
@@ -122,6 +123,47 @@ I'm exploring:
 - Monitoring + audit pipelines  
 
 If you have ideas, DM me — I’d love to build them.
+
+---
+
+Check the `Day-1` folder for the full code.
+
+---
+
+## Day 2: GitHub Issue Label → Slack Notifier
+
+Similar to Day 1, but this time I'm watching for when issues get labeled on GitHub and sending that to Slack instead of Discord.
+
+### The Flow
+
+```
+GitHub issues.labeled → API validates it → Event emits → Slack gets notified
+```
+
+### What I Built
+
+- **API Endpoint** at `/github/issue-labeled` that receives GitHub webhooks
+- **Event Handler** that formats and sends Slack attachments
+- **Slack Service** with proper DDD structure (just like the Discord one from Day 1)
+- **Error Handling** using the same middleware pattern
+
+### Stack
+
+- Motia
+- TypeScript
+- Zod validation
+- Slack Webhooks API
+
+### What's Different from Day 1?
+
+Not much! That's kinda the point - I'm getting comfortable with the Motia patterns. The main difference is:
+- Slack uses "attachments" instead of Discord's "embeds"
+- Different webhook payload structure from GitHub (issues vs releases)
+- Different environment variable (`SLACK_WEBHOOK_URL`)
+
+The architecture is identical though - API step emits event, event step handles notification. Clean separation of concerns.
+
+Check `Day-2` folder for the code.
 
 ---
 
