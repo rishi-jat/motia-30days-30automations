@@ -1,71 +1,67 @@
 # 30 Days of Motia Automation 🚀
 
-This repository is my personal challenge to build **30 real-world, production‑ready backend automations in 30 days** using [Motia](https://motia.dev).  
-Everything here is built with ❤️ by Rishi — using Motia, TypeScript, clean architecture, and an event‑driven mindset.
+**Hi, I'm Rishi.** 👋
 
-The goal is simple:  
-**Turn ideas and old n8n workflows into scalable, testable, maintainable backends — one day at a time.**
+I've decided to challenge myself: **Build 30 real-world, production-ready backend automations in 30 days.**
 
----
+Why? Because I wanted to stop relying on flaky no-code tools and actually *master* event-driven architecture. I'm using [Motia](https://motia.dev) to build these because it lets me write actual code (TypeScript) but handles all the infrastructure boring stuff for me.
 
-## 🌟 Progress Tracker
-
-| Day | Project | Status |
-|-----|---------|--------|
-| **1** | GitHub → Discord Notifier | ✅ Done |
-| **2** | GitHub Issue Labels → Slack | ✅ Done |
-| **3-30** | *Cooking...* | 🔜 |
-
-Each day lives in its own folder:
-
-```
-Day-1/
-Day-2/
-...
-Day-30/
-```
+This repo is my daily log. No "hello world" apps here—only real tools that I (or you) can actually use.
 
 ---
 
-# 🧩 Day 1 — GitHub Release Notifier
+## 🗺️ The Journey So Far
 
-For the first automation, I rebuilt an old n8n workflow as a proper backend service.
-
-### What I Built
-A simple flow that listens for `release.published` webhooks from GitHub and posts them to Discord. It replaces my flaky no-code setup with something that actually validates data before acting on it.
-
-[Check out the Day 1 code](./Day-1)
-
----
-
-# 🛠️ Day 2 — GitHub Issue Labels → Slack
-
-Day 1 was about getting it working. Day 2 was about **making it bulletproof**.
-
-### What I Built
-A multi-event workflow that handles GitHub Issues.
-- **Labels:** If you tag an issue as "bug", it pings Slack in RED. "Feature" gets ORANGE.
-- **Comments:** It also listens for new comments and notifies the team.
-
-### The Focus: Production Safety
-I spent most of the time ensuring this **never crashes**. GitHub sends a lot of random events, and if you don't check for missing fields, your server dies. I implemented "defensive parsing" and graceful degradation (so if one part fails, the rest still works).
-
-[Check out the Day 2 code](./Day-2)
-
-
-## 🔗 Follow the Journey
-
-Daily updates here and on socials:
-
-- GitHub: https://github.com/rishi-jat  
-- X (Twitter): https://twitter.com/rishixtwt  
-- LinkedIn: https://linkedin.com/in/rishi-jat-496245320  
-
-**Hashtag:** `#30days30automations`
+| Day | Project | The "Aha!" Moment | Status |
+|-----|---------|-------------------|--------|
+| **1** | [**GitHub Release → Discord**](./Day-1) | "Wait, I can validate webhooks *before* processing them?" | ✅ Shipped |
+| **2** | [**GitHub Issues → Slack**](./Day-2) | "Defensive coding saves servers from crashing." | ✅ Shipped |
+| **3** | *Coming Soon...* | *TBD* | 🚧 Brewing |
+| ... | | | |
+| **30** | *The Finale* | | 🔜 |
 
 ---
 
-## ❤️ Made by Rishi — Powered by Motia  
-This challenge is helping me grow, experiment, and understand scalable backend systems deeply.  
-Day 1 done.  
-Day 2 loading…
+## 🧩 Day 1: Solving My FOMO
+**Project:** [GitHub Release Notifier](./Day-1)
+
+I always miss new releases from my favorite libraries. I used to rely on emails, but they get buried.
+So, I built a bot that listens for GitHub releases and posts a beautiful card to my Discord server.
+
+**Tech:** Webhooks, Zod Validation, Discord Embeds.
+
+---
+
+## �️ Day 2: Making It Bulletproof
+**Project:** [GitHub Issue Labeler](./Day-2)
+
+Day 1 was easy. Day 2 was about **production safety**.
+I built a workflow that handles GitHub Issues (labels & comments). The hard part? GitHub sends *weird* data sometimes.
+I learned how to write "defensive code" that gracefully handles missing fields, unknown events, and even database failures without crashing the whole system.
+
+**Tech:** Multi-event handling, State Management, Graceful Degradation.
+
+---
+
+## 🛠️ The Stack
+
+Everything in this repo is built with:
+*   **Motia** (The backbone)
+*   **TypeScript** (Because types save lives)
+*   **Zod** (Trust no payload)
+*   **Node.js**
+
+---
+
+## 🔗 Connect With Me
+
+I'm documenting the daily struggle and wins here:
+
+*   **Twitter/X:** [@rishixtwt](https://twitter.com/rishixtwt)
+*   **GitHub:** [@rishi-jat](https://github.com/rishi-jat)
+*   **LinkedIn:** [Rishi Jat](https://linkedin.com/in/rishi-jat-496245320)
+
+Follow along! If you have an idea for Day 3, let me know. 👇
+
+---
+*Made with ❤️ (and a lot of coffee) by Rishi.*
