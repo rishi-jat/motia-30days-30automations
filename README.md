@@ -1,67 +1,64 @@
-# 30 Days of Motia Automation 🚀
+# 30 Days of Motia Automation
 
-**Hi, I'm Rishi.** 👋
+I’m Rishi, and this repository is my personal challenge: build 30 practical, production-ready backend automations in 30 days.
 
-I've decided to challenge myself: **Build 30 real-world, production-ready backend automations in 30 days.**
+The goal is simple — move beyond no‑code tools, understand event‑driven systems properly, and build things that actually solve problems. I’m using Motia because it lets me focus on logic while the platform handles the infrastructure pieces.
 
-Why? Because I wanted to stop relying on flaky no-code tools and actually *master* event-driven architecture. I'm using [Motia](https://motia.dev) to build these because it lets me write actual code (TypeScript) but handles all the infrastructure boring stuff for me.
-
-This repo is my daily log. No "hello world" apps here—only real tools that I (or you) can actually use.
+This repo is my daily log of what I build, what breaks, and what I learn along the way.
 
 ---
 
-## 🗺️ The Journey So Far
+## Progress
 
-| Day | Project | The "Aha!" Moment | Status |
-|-----|---------|-------------------|--------|
-| **1** | [**GitHub Release → Discord**](./Day-1) | "Wait, I can validate webhooks *before* processing them?" | ✅ Shipped |
-| **2** | [**GitHub Issues → Slack**](./Day-2) | "Defensive coding saves servers from crashing." | ✅ Shipped |
-| **3** | *Coming Soon...* | *TBD* | 🚧 Brewing |
+| Day | Project | Key Insight | Status |
+|-----|---------|-------------|--------|
+| **1** | [GitHub Release → Discord](./Day-1) | Validating incoming webhooks early prevents bad payloads from taking down the workflow. | Shipped |
+| **2** | [GitHub Issues → Slack](./Day-2) | Defensive code matters — GitHub events can be inconsistent, and you can’t trust fields to always exist. | Shipped |
+| **3** | Coming Soon | — | In progress |
 | ... | | | |
-| **30** | *The Finale* | | 🔜 |
+| **30** | Finale | — | Upcoming |
 
 ---
 
-## 🧩 Day 1: Solving My FOMO
-**Project:** [GitHub Release Notifier](./Day-1)
+## Day 1: GitHub Release Notifier
 
-I always miss new releases from my favorite libraries. I used to rely on emails, but they get buried.
-So, I built a bot that listens for GitHub releases and posts a beautiful card to my Discord server.
+I often miss important library releases, and email notifications aren’t reliable.  
+To fix that, I built a workflow that listens for GitHub release events and posts a formatted update to a Discord channel.
 
-**Tech:** Webhooks, Zod Validation, Discord Embeds.
-
----
-
-## �️ Day 2: Making It Bulletproof
-**Project:** [GitHub Issue Labeler](./Day-2)
-
-Day 1 was easy. Day 2 was about **production safety**.
-I built a workflow that handles GitHub Issues (labels & comments). The hard part? GitHub sends *weird* data sometimes.
-I learned how to write "defensive code" that gracefully handles missing fields, unknown events, and even database failures without crashing the whole system.
-
-**Tech:** Multi-event handling, State Management, Graceful Degradation.
+**Tech:** Webhooks, Zod validation, Discord embeds.
 
 ---
 
-## 🛠️ The Stack
+## Day 2: GitHub Issue Labeler
 
-Everything in this repo is built with:
-*   **Motia** (The backbone)
-*   **TypeScript** (Because types save lives)
-*   **Zod** (Trust no payload)
-*   **Node.js**
+For Day 2, I focused on making things production‑safe.  
+GitHub sends a wide range of issue-related events, and some of them have missing or unexpected fields. The workflow now handles multiple event types gracefully and keeps state without crashing on edge cases.
+
+**Tech:** Multi‑event handling, state management, error‑tolerant execution.
+
+---
+
+## Stack
+
+All automations in this challenge are built with:
+
+- Motia  
+- TypeScript  
+- Zod  
+- Node.js  
 
 ---
 
-## 🔗 Connect With Me
+## Connect
 
-I'm documenting the daily struggle and wins here:
+I’m sharing the daily progress on:
 
-*   **Twitter/X:** [@rishixtwt](https://twitter.com/rishixtwt)
-*   **GitHub:** [@rishi-jat](https://github.com/rishi-jat)
-*   **LinkedIn:** [Rishi Jat](https://linkedin.com/in/rishi-jat-496245320)
+- Twitter/X: https://twitter.com/rishixtwt  
+- GitHub: https://github.com/rishi-jat  
+- LinkedIn: https://linkedin.com/in/rishi-jat-496245320  
 
-Follow along! If you have an idea for Day 3, let me know. 👇
+If you have an idea for an upcoming day, feel free to suggest it.
 
 ---
-*Made with ❤️ (and a lot of coffee) by Rishi.*
+
+*Made with ❤️ by Rishi.*
