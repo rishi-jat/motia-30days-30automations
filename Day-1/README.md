@@ -1,86 +1,75 @@
-# Day-1
+# Day 1: GitHub Release → Discord Notifier 🚀
 
-A Motia tutorial project in TypeScript.
+For the first day of my **30 Days of Motia** challenge, I wanted to solve a simple problem: I always miss new releases from my favorite open-source libraries.
 
-## What is Motia?
+I used to have an n8n workflow for this, but it was flaky and hard to debug. So, I rebuilt it as a proper backend service using Motia.
 
-Motia is an open-source, unified backend framework that eliminates runtime fragmentation by bringing **APIs, background jobs, queueing, streaming, state, workflows, AI agents, observability, scaling, and deployment** into one unified system using a single core primitive, the **Step**.
+## What I Built
 
-## Quick Start
+A simple, event-driven automation that:
+1.  **Listens** for GitHub webhooks (`release.published`)
+2.  **Validates** the payload (so we don't process garbage)
+3.  **Formats** a nice Discord embed message
+4.  **Sends** it to my server
+
+It sounds simple, but doing it with **TypeScript and Zod** means it's way more robust than my old drag-and-drop setup.
+
+## How It Works
+
+I split the logic into two parts (Steps):
+
+1.  **`GitHubWebhook` (API Step)**: This is the entry point. It receives the POST request from GitHub, checks if it's actually a release event, and if so, emits an internal event called `github-release-published`.
+2.  **`DiscordNotification` (Event Step)**: This listens for that internal event. When it hears it, it grabs the release details (version, body, URL) and shoots a message to Discord.
+
+Separating them means I can easily add more listeners later (like sending an email or a Slack msg) without touching the webhook logic.
+
+## How to Run It
+
+If you want to try this out:
+
+1.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+2.  **Set up your environment**:
+    Create a `.env` file in this folder:
+    ```bash
+    DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/your-id/your-token
+    ```
+
+3.  **Start the server**:
+    ```bash
+    npm run dev
+    ```
+
+## Testing It
+
+You don't need to wait for a real library to release something. You can fake it with `curl`:
 
 ```bash
-# Start the development server
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+curl -X POST http://localhost:3000/github/webhook \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "published",
+    "release": {
+      "name": "v1.0.0",
+      "body": "Initial release with cool features!",
+      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.0.0"
+    },
+    "repository": {
+      "full_name": "vercel/next.js"
+    }
+  }'
 ```
 
-This starts the Motia runtime and the **Workbench** - a powerful UI for developing and debugging your workflows. By default, it's available at [`http://localhost:3000`](http://localhost:3000).
+If everything works, you should see a message pop up in your Discord!
 
-1. **Open the Workbench** in your browser at [`http://localhost:3000`](http://localhost:3000)
-2. **Click the `Tutorial`** button on the top right of the workbench
-3. **Complete the `Tutorial`** to get an understanding of the basics of Motia and using the Workbench
+## What I Learned
 
-## Step Types
+- **Motia is fast.** I got the basic flow running in about 10 minutes.
+- **Zod is a lifesaver.** Defining the schema upfront made writing the logic so much easier because I knew exactly what data I had.
+- **Event-driven is clean.** I love that my API handler doesn't know anything about Discord. It just says "Hey, a release happened!" and moves on.
 
-Every Step has a `type` that defines how it triggers:
-
-| Type | When it runs | Use case |
-|------|--------------|----------|
-| **`api`** | HTTP request | REST APIs, webhooks |
-| **`event`** | Event emitted | Background jobs, workflows |
-| **`cron`** | Schedule | Cleanup, reports, reminders |
-
-## Development Commands
-
-```bash
-# Start Workbench and development server
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-
-# Generate TypeScript types from Step configs
-npm run generate-types
-# or
-yarn generate-types
-# or
-pnpm generate-types
-
-# Build project for deployment
-npm run build
-# or
-yarn build
-# or
-pnpm build
-```
-
-## Project Structure
-
-```
-steps/              # Your Step definitions (or use src/)
-src/                # Shared services and utilities
-motia.config.ts     # Motia configuration
-```
-
-Steps are auto-discovered from your `steps/` or `src/` directories - no manual registration required.
-
-## Tutorial
-
-This project includes an interactive tutorial that will guide you through:
-- Understanding Steps and their types
-- Creating API endpoints
-- Building event-driven workflows
-- Using state management
-- Observing your flows in the Workbench
-
-## Learn More
-
-- [Documentation](https://motia.dev/docs) - Complete guides and API reference
-- [Quick Start Guide](https://motia.dev/docs/getting-started/quick-start) - Detailed getting started tutorial
-- [Core Concepts](https://motia.dev/docs/concepts/overview) - Learn about Steps and Motia architecture
-- [Discord Community](https://discord.gg/motia) - Get help and connect with other developers
+Onto Day 2! 👋
 
