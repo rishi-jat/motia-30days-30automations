@@ -14,7 +14,7 @@ This repo is my daily log of what I build, what breaks, and what I learn along t
 |-----|---------|-------------|--------|
 | **1** | [GitHub Release → Discord](./Day-1) | Validating incoming webhooks early prevents bad payloads from taking down the workflow. | Shipped |
 | **2** | [GitHub Issues → Slack](./Day-2) | Defensive code matters — GitHub events can be inconsistent, and you can’t trust fields to always exist. | Shipped |
-| **3** | Coming Soon | — | In progress |
+| **3** | [AI Auto-Documentation Generator](./Day-3) | Helping new contributors understand large codebases with automated repo analysis. | Shipped |
 | ... | | | |
 | **30** | Finale | — | Upcoming |
 
@@ -36,6 +36,17 @@ GitHub sends a wide range of issue-related events, and some of them have missing
 
 **Tech:** Multi‑event handling, state management, error‑tolerant execution.
 
+---
+
+## Day 3: AI Auto‑Documentation Generator
+
+For Day 3, I built an AI-powered workflow that analyzes any repository using Motia’s event-driven steps and automatically generates a complete `CONTRIBUTOR_GUIDE.md`.  
+The goal is to help new open-source contributors understand large codebases without feeling lost.
+
+The workflow scans the repo, extracts structure and key files, and generates a beginner-friendly documentation output.  
+It includes an LLM-powered generator with a graceful fallback system, plus caching so later runs are instant.
+
+**Tech:** Event pipeline, GitHub API, LLM integration, automatic fallback, repo modeling.
 ---
 
 ## Stack
