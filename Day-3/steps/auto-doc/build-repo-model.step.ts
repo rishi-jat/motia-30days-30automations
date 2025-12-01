@@ -5,7 +5,7 @@ import { coreMiddleware } from '../../src/middlewares/core.middleware'
 
 const fileSchema = z.object({
     path: z.string(),
-    content: z.string(),
+    content: z.string().optional(),
     snippet: z.string(),
     lines: z.number(),
     size: z.number(),

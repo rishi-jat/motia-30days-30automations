@@ -25,9 +25,15 @@ export const config: ApiRouteConfig = {
 }
 
 export const handler: Handlers['TriggerAutoDoc'] = async (req, { logger, emit }) => {
-    const owner = req.body.owner || process.env.GITHUB_OWNER || 'motiaDev'
-    const repo = req.body.repo || process.env.GITHUB_REPO || 'motia'
-    const branch = req.body.branch || process.env.GITHUB_BRANCH || 'main'
+    // Handle case where UI sends "string" as default value
+    const getVal = (val: string | undefined, envVal: string | undefined, defaultVal: string) => {
+        if (!val || val === 'string') return envVal || defaultVal
+        return val
+    }
+
+    const owner = getVal(req.body.owner, process.env.GITHUB_OWNER, 'MotiaDev')
+    const repo = getVal(req.body.repo, process.env.GITHUB_REPO, 'motia')
+    const branch = getVal(req.body.branch, process.env.GITHUB_BRANCH, 'main')
 
     logger.info('Auto-doc manually triggered via API', { owner, repo, branch })
 

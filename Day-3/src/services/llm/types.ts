@@ -20,7 +20,7 @@ export interface RepoModel {
     structure: Array<{ path: string; type: 'file' | 'dir' }>
     files: Array<{
         path: string
-        content: string
+        content?: string
         snippet: string
         lines: number
         size: number
