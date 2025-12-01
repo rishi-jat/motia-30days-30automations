@@ -16,6 +16,7 @@ const inputSchema = z.object({
     repo: z.string(),
     branch: z.string(),
     files: z.array(fileSchema),
+    cached: z.boolean().optional(),
 })
 
 const outputSchema = z.object({
@@ -34,74 +35,101 @@ export const config: EventConfig = {
 
 export const handler: Handlers['BuildRepoModel'] = async (input, { logger, emit }) => {
     const { owner, repo, branch, files } = input
+    const isCached = (input as any).cached === true
 
-    logger.info('Building repository model', { fileCount: files.length })
+    let model: RepoModel
 
-    // Build structure from file paths
-    const structure = files.map((file) => ({
-        path: file.path,
-        type: 'file' as const,
-    }))
+    if (isCached) {
+        logger.info('Loading repository model from cache')
+        try {
+            model = require('../../src/cache/repo-model.json')
+        } catch (e) {
+            logger.warn('Failed to load cached model, rebuilding...')
+            // Fallback to rebuilding if cache missing (though files might be empty if ReadFiles skipped)
+            // In reality, if ReadFiles skipped, files is empty, so we can't rebuild.
+            // We assume cache exists if ReadFiles said so.
+            throw new Error('Cached model missing')
+        }
+    } else {
+        logger.info('Building repository model', { fileCount: files.length })
 
-    // Infer modules from directory structure
-    const modules = Array.from(
-        new Set(
-            files
-                .map((f) => f.path.split('/')[0])
-                .filter((dir) => dir && dir !== '.' && !dir.startsWith('.'))
+        // Build structure from file paths
+        const structure = files.map((file) => ({
+            path: file.path,
+            type: 'file' as const,
+        }))
+
+        // Infer modules from directory structure
+        const modules = Array.from(
+            new Set(
+                files
+                    .map((f) => f.path.split('/')[0])
+                    .filter((dir) => dir && dir !== '.' && !dir.startsWith('.'))
+            )
         )
-    )
 
-    // Find workflows
-    const workflows = files.filter(
-        (f) => f.path.includes('/.github/workflows/') || f.path.includes('/workflows/')
-    )
+        // Find workflows
+        const workflows = files.filter(
+            (f) => f.path.includes('/.github/workflows/') || f.path.includes('/workflows/')
+        )
 
-    // Find tests
-    const tests = files.filter(
-        (f) =>
-            f.path.includes('/test/') ||
-            f.path.includes('/tests/') ||
-            f.path.includes('/__tests__/') ||
-            f.path.includes('.test.') ||
-            f.path.includes('.spec.')
-    )
+        // Find tests
+        const tests = files.filter(
+            (f) =>
+                f.path.includes('/test/') ||
+                f.path.includes('/tests/') ||
+                f.path.includes('/__tests__/') ||
+                f.path.includes('.test.') ||
+                f.path.includes('.spec.')
+        )
 
-    // Find configs
-    const configs = files.filter(
-        (f) =>
-            f.path === 'package.json' ||
-            f.path === 'tsconfig.json' ||
-            f.path.endsWith('.config.js') ||
-            f.path.endsWith('.config.ts') ||
-            f.path.endsWith('.json')
-    )
+        // Find configs
+        const configs = files.filter(
+            (f) =>
+                f.path === 'package.json' ||
+                f.path === 'tsconfig.json' ||
+                f.path.endsWith('.config.js') ||
+                f.path.endsWith('.config.ts') ||
+                f.path.endsWith('.json')
+        )
 
-    const model: RepoModel = {
-        owner,
-        repo,
-        branch,
-        structure,
-        files,
-        modules,
-        workflows: workflows.map((w) => w.path),
-        tests: tests.map((t) => t.path),
-        configs: configs.map((c) => c.path),
-        timestamp: new Date().toISOString(),
+        model = {
+            owner,
+            repo,
+            branch,
+            structure,
+            files,
+            modules,
+            workflows: workflows.map((w) => w.path),
+            tests: tests.map((t) => t.path),
+            configs: configs.map((c) => c.path),
+            timestamp: new Date().toISOString(),
+        }
+
+        // Save model to cache
+        try {
+            const fs = require('fs')
+            const path = require('path')
+            fs.writeFileSync(
+                path.join(process.cwd(), 'src/cache/repo-model.json'),
+                JSON.stringify(model, null, 2)
+            )
+            logger.info('Repository model cached')
+        } catch (e) {
+            logger.warn('Failed to cache repo model')
+        }
     }
 
-    logger.info('Repository model built', {
-        files: files.length,
-        modules: modules.length,
-        workflows: workflows.length,
-        tests: tests.length,
-        configs: configs.length,
+    logger.info('Repository model ready', {
+        modules: model.modules.length,
+        cached: isCached
     })
 
     await emit({
         topic: 'repo-model-built',
         data: {
             model,
+            cached: isCached,
         },
     })
 }

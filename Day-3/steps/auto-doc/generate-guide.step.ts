@@ -23,175 +23,55 @@ export const config: EventConfig = {
 }
 
 import type { RepoModel } from '../../src/services/llm/types'
+import { generateStaticDocumentation } from '../../src/services/llm/generate-docs'
 
 export const handler: Handlers['GenerateGuide'] = async (input, { logger, emit }) => {
     const model = input.model as RepoModel
-
-    logger.info('Generating documentation with LLM', {
-        repo: model.repo,
-        fileCount: model.files.length,
-    })
-
-    const apiKey = process.env.OPENAI_API_KEY
-    if (!apiKey) {
-        logger.error('OPENAI_API_KEY environment variable not set')
-        throw new Error('OpenAI API key is required')
-    }
+    const isCached = (input as any).cached === true
 
     let markdown = ''
 
-    try {
-        markdown = await generateDocumentation(model, apiKey)
-        logger.info('Documentation generated with LLM', {
-            markdownLength: markdown.length,
-            repo: model.repo,
-        })
-    } catch (error) {
-        logger.warn('LLM generation failed, falling back to static generation', {
-            error: error instanceof Error ? error.message : String(error),
-        })
+    if (isCached) {
+        logger.info('Using cached static documentation (fast mode)')
+        markdown = generateStaticDocumentation(model)
+    } else {
+        const apiKey = process.env.OPENAI_API_KEY
+        if (!apiKey) {
+            logger.warn('OPENAI_API_KEY not set, using static generator')
+            markdown = generateStaticDocumentation(model)
+        } else {
+            try {
+                // Try LLM generation
+                // markdown = await generateDocumentation(model, apiKey) // Commented out to force static for demo stability if needed, but user wants fallback
+                // Actually, let's try LLM first as requested
+                const { generateDocumentation } = require('../../src/services/llm/generate-docs')
+                markdown = await generateDocumentation(model, apiKey)
 
-        // Fallback: Generate comprehensive static documentation
-        const { owner, repo, branch, files, modules, workflows, tests, configs } = model
+                logger.info('Documentation generated with LLM', {
+                    markdownLength: markdown.length,
+                    repo: model.repo,
+                })
+            } catch (error) {
+                logger.warn('LLM generation failed, falling back to static generation', {
+                    error: error instanceof Error ? error.message : String(error),
+                })
+                markdown = generateStaticDocumentation(model)
+            }
+        }
 
-        markdown = `# ${repo} - Contributor Guide
-
-> **Auto-generated documentation** to help new contributors understand and contribute to this project.  
-> Repository: [\`${owner}/${repo}\`](https://github.com/${owner}/${repo})  
-> Branch: \`${branch}\`  
-> Generated: ${new Date().toLocaleString()}
-
----
-
-## 📋 Table of Contents
-
-- [Project Overview](#project-overview)
-- [Repository Structure](#repository-structure)
-- [Getting Started](#getting-started)
-- [Architecture Overview](#architecture-overview)
-- [Key Directories](#key-directories)
-- [Important Files](#important-files)
-- [Testing](#testing)
-- [Contributing](#contributing)
-
----
-
-## 🎯 Project Overview
-
-### What is ${repo}?
-
-**${repo}** is a project with ${files.length} files organized across ${modules.length} main modules.
-
-**Repository Stats:**
-- 📁 **Total Files:** ${files.length}
-- 🧩 **Modules:** ${modules.length}
-- 🧪 **Test Files:** ${tests.length}
-- ⚙️ **Configuration:** ${configs.length}
-- ⚡ **Workflows:** ${workflows.length}
-
----
-
-## 📂 Repository Structure
-
-\`\`\`
-${repo}/
-${modules.slice(0, 15).map((dir: string) => `├── ${dir}/`).join('\n')}
-${modules.length > 15 ? `└── ... and ${modules.length - 15} more directories` : ''}
-\`\`\`
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Node.js:** v18 or higher recommended
-- **Package Manager:** npm, yarn, or pnpm
-- **Git:** For cloning and contributing
-
-### Installation
-
-\`\`\`bash
-# 1. Clone the repository
-git clone https://github.com/${owner}/${repo}.git
-
-# 2. Navigate to the project
-cd ${repo}
-
-# 3. Install dependencies
-npm install
-
-# 4. Start development server
-npm run dev
-\`\`\`
-
----
-
-## 🏗️ Architecture Overview
-
-### Project Type
-
-Based on the repository structure, this appears to be a **${modules.includes('packages') ? 'Monorepo' : 'Standard'
-            }** project.
-
-### Architecture Diagram
-
-\`\`\`mermaid
-flowchart TD
-    A[${repo}] --> B[Source Code]
-    A --> C[Tests]
-    A --> D[Configuration]
-    
-    ${modules.includes('src') ? 'B --> E[src/]' : ''}
-    ${modules.includes('packages') ? 'B --> F[packages/]' : ''}
-    ${tests.length > 0 ? 'C --> G[Test Suites]' : ''}
-\`\`\`
-
----
-
-## 📁 Key Directories
-
-${modules.slice(0, 10).map((dir: string) => `### \`${dir}/\`
-- **Module:** ${dir}
-`).join('\n')}
-
----
-
-## 📄 Important Files
-
-### Configuration
-${configs.slice(0, 10).map((f: string) => `- [\`${f}\`](${f})`).join('\n')}
-
-### Workflows
-${workflows.slice(0, 5).map((f: string) => `- [\`${f}\`](${f})`).join('\n')}
-
----
-
-## 🧪 Testing
-
-This project includes **${tests.length} test files**.
-
-### Test Files Location
-${tests.slice(0, 5).map((f: string) => `- \`${f}\``).join('\n')}
-
----
-
-## 🤝 Contributing
-
-1. **Fork** the repository
-2. **Clone** your fork locally
-3. **Create a branch** for your feature
-4. **Make your changes** and commit
-5. **Push** to your fork
-6. **Open a Pull Request**
-
----
-
-**Generated by:** Motia Auto-Doc Workflow  
-**Repository:** [${owner}/${repo}](https://github.com/${owner}/${repo})
-
-*This guide was automatically generated. If you find any issues, please open an issue!*
-`
+        // Update cache to initialized
+        try {
+            const fs = require('fs')
+            const path = require('path')
+            const cachePath = path.join(process.cwd(), 'src/cache/auto-doc-cache.json')
+            fs.writeFileSync(cachePath, JSON.stringify({
+                initialized: true,
+                lastGenerated: new Date().toISOString()
+            }, null, 2))
+            logger.info('Cache updated to initialized')
+        } catch (e) {
+            logger.warn('Failed to update cache file')
+        }
     }
 
     await emit({

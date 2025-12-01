@@ -23,6 +23,7 @@ const outputSchema = z.object({
     repo: z.string(),
     branch: z.string(),
     files: z.array(fileSchema),
+    cached: z.boolean().optional(),
 })
 
 export const config: EventConfig = {
@@ -37,6 +38,30 @@ export const config: EventConfig = {
 
 export const handler: Handlers['ReadFiles'] = async (input, { logger, emit }) => {
     const { owner, repo, branch, files: filePaths } = input
+
+    // Check cache
+    let isCached = false
+    try {
+        const cache = require('../../src/cache/auto-doc-cache.json')
+        isCached = cache.initialized
+    } catch (e) {
+        // Cache file might not exist yet
+    }
+
+    if (isCached) {
+        logger.info('Cache initialized, skipping file reading')
+        await emit({
+            topic: 'files-read',
+            data: {
+                owner,
+                repo,
+                branch,
+                files: [],
+                cached: true,
+            },
+        })
+        return
+    }
 
     logger.info('Reading file contents', { totalFiles: filePaths.length })
 
@@ -54,7 +79,6 @@ export const handler: Handlers['ReadFiles'] = async (input, { logger, emit }) =>
             const fileContent = await fetchFileContent(owner, repo, path, token)
 
             // Optimize payload: Only keep snippets for the first few files
-            // This prevents E2BIG errors (Argument list too long) when passing data between steps
             const shouldKeepSnippet = filesWithSnippets < MAX_SNIPPETS
             if (shouldKeepSnippet) {
                 filesWithSnippets++
@@ -65,14 +89,14 @@ export const handler: Handlers['ReadFiles'] = async (input, { logger, emit }) =>
                 snippet: shouldKeepSnippet ? fileContent.snippet : '',
                 lines: fileContent.lines,
                 size: fileContent.size,
-                // content: fileContent.content // REMOVED to save space
             })
-            logger.info('File read successfully', { path, lines: fileContent.lines, hasSnippet: shouldKeepSnippet })
+
+            // Log every 50 files to avoid spam
+            if (files.length % 50 === 0) {
+                logger.info('Progress', { filesRead: files.length })
+            }
         } catch (error) {
-            logger.warn('Failed to read file, skipping', {
-                path,
-                error: error instanceof Error ? error.message : String(error),
-            })
+            logger.warn('Failed to read file, skipping', { path })
         }
     }
 
@@ -85,6 +109,7 @@ export const handler: Handlers['ReadFiles'] = async (input, { logger, emit }) =>
             repo,
             branch,
             files,
+            cached: false,
         },
     })
 }

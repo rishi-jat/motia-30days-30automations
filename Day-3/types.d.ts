@@ -14,12 +14,12 @@ declare module 'motia' {
   interface Handlers {
     'WriteGuide': EventHandler<{ markdown: string; generatedAt: string }, never>
     'TriggerAutoDoc': ApiRouteHandler<{ owner?: string; repo?: string; branch?: string }, ApiResponse<200, { message: string; owner: string; repo: string; branch: string }>, { topic: 'auto-doc-triggered'; data: { owner: string; repo: string; branch: string; triggeredAt: string } }>
-    'ReadFiles': EventHandler<{ owner: string; repo: string; branch: string; files: Array<string> }, { topic: 'files-read'; data: { owner: string; repo: string; branch: string; files: Array<{ path: string; content?: string; snippet: string; lines: number; size: number }> } }>
+    'ReadFiles': EventHandler<{ owner: string; repo: string; branch: string; files: Array<string> }, { topic: 'files-read'; data: { owner: string; repo: string; branch: string; files: Array<{ path: string; content?: string; snippet: string; lines: number; size: number }>; cached?: boolean } }>
     'GenerateGuide': EventHandler<{ model: unknown }, { topic: 'guide-generated'; data: { markdown: string; generatedAt: string } }>
     'FetchRepoTree': EventHandler<{ owner: string; repo: string; branch: string; triggeredAt: string }, { topic: 'repo-tree-fetched'; data: { owner: string; repo: string; branch: string; tree: Array<{ path: string; type: 'file' | 'dir' }> } }>
     'FetchFileList': EventHandler<{ owner: string; repo: string; branch: string; tree: Array<{ path: string; type: 'file' | 'dir' }> }, { topic: 'file-list-fetched'; data: { owner: string; repo: string; branch: string; files: Array<string> } }>
     'AutoDocCronTrigger': CronHandler<{ topic: 'auto-doc-triggered'; data: { owner: string; repo: string; branch: string; triggeredAt: string } }>
-    'BuildRepoModel': EventHandler<{ owner: string; repo: string; branch: string; files: Array<{ path: string; content?: string; snippet: string; lines: number; size: number }> }, { topic: 'repo-model-built'; data: { model: unknown } }>
+    'BuildRepoModel': EventHandler<{ owner: string; repo: string; branch: string; files: Array<{ path: string; content?: string; snippet: string; lines: number; size: number }>; cached?: boolean }, { topic: 'repo-model-built'; data: { model: unknown } }>
   }
     
 }
