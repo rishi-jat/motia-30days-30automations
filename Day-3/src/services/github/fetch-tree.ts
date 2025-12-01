@@ -8,9 +8,36 @@ export async function fetchRepositoryTree(
     branch = 'main'
 ): Promise<RepoTree[]> {
     try {
-        const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`
+        // Step 1: Get the SHA of the branch
+        const branchUrl = `https://api.github.com/repos/${owner}/${repo}/branches/${branch}`
 
-        const response = await fetch(url, {
+        const branchResponse = await fetch(branchUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'User-Agent': 'Motia-AutoDoc',
+            },
+        })
+
+        if (!branchResponse.ok) {
+            throw new ExternalServiceError(
+                `GitHub API returned ${branchResponse.status} when fetching branch: ${branchResponse.statusText}`,
+                {
+                    status: branchResponse.status,
+                    owner,
+                    repo,
+                    branch,
+                }
+            )
+        }
+
+        const branchData = await branchResponse.json()
+        const treeSha = branchData.commit.commit.tree.sha
+
+        // Step 2: Get the tree using the SHA
+        const treeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${treeSha}?recursive=1`
+
+        const response = await fetch(treeUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/vnd.github.v3+json',
