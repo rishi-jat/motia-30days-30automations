@@ -16,7 +16,7 @@ export async function generateDocumentation(
                 Authorization: `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
-                model: 'gpt-4',
+                model: 'gpt-4o-mini',
                 messages: [
                     {
                         role: 'system',
@@ -29,7 +29,7 @@ export async function generateDocumentation(
                     },
                 ],
                 temperature: 0.7,
-                max_tokens: 4000,
+                max_tokens: 16000,
             }),
         })
 

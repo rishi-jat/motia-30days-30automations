@@ -13,6 +13,7 @@ declare module 'motia' {
 
   interface Handlers {
     'WriteGuide': EventHandler<{ markdown: string; generatedAt: string }, never>
+    'TriggerAutoDoc': ApiRouteHandler<{ owner?: string; repo?: string; branch?: string }, ApiResponse<200, { message: string; owner: string; repo: string; branch: string }>, { topic: 'auto-doc-triggered'; data: { owner: string; repo: string; branch: string; triggeredAt: string } }>
     'ReadFiles': EventHandler<{ owner: string; repo: string; branch: string; files: Array<string> }, { topic: 'files-read'; data: { owner: string; repo: string; branch: string; files: Array<{ path: string; content: string; snippet: string; lines: number; size: number }> } }>
     'GenerateGuide': EventHandler<{ model: unknown }, { topic: 'guide-generated'; data: { markdown: string; generatedAt: string } }>
     'FetchRepoTree': EventHandler<{ owner: string; repo: string; branch: string; triggeredAt: string }, { topic: 'repo-tree-fetched'; data: { owner: string; repo: string; branch: string; tree: Array<{ path: string; type: 'file' | 'dir' }> } }>
