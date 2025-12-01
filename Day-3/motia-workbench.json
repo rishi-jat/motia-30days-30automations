@@ -79,36 +79,36 @@
     "id": "auto-doc",
     "config": {
       "steps/auto-doc/write-guide.step.ts": {
-        "x": 1189,
-        "y": -215
+        "x": 1160,
+        "y": -227
       },
       "steps/auto-doc/trigger-api.step.ts": {
-        "x": -118,
-        "y": -24
+        "x": -117,
+        "y": -6
       },
       "steps/auto-doc/read-files.step.ts": {
         "x": 602,
         "y": 33
       },
       "steps/auto-doc/generate-guide.step.ts": {
-        "x": 855,
-        "y": -328
+        "x": 813,
+        "y": -306
       },
       "steps/auto-doc/fetch-repo-tree.step.ts": {
         "x": 256,
         "y": -108
       },
       "steps/auto-doc/fetch-file-list.step.ts": {
-        "x": 500,
-        "y": -329
+        "x": 456,
+        "y": -309
       },
       "steps/auto-doc/cron-trigger.step.ts": {
-        "x": -121,
-        "y": -277
+        "x": -113,
+        "y": -296
       },
       "steps/auto-doc/build-repo-model.step.ts": {
-        "x": 869,
-        "y": 30
+        "x": 878,
+        "y": 33
       }
     }
   }
