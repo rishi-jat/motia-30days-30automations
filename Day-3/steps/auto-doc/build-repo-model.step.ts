@@ -21,6 +21,7 @@ const inputSchema = z.object({
 
 const outputSchema = z.object({
     model: z.any(), // RepoModel type
+    cached: z.boolean().optional(),
 })
 
 export const config: EventConfig = {
