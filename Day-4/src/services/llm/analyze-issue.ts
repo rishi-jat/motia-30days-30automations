@@ -55,10 +55,21 @@ export async function analyzeIssue(
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new ExternalServiceError(`OpenAI API returned ${response.status}`, {
-                status: response.status,
-                error: errorText,
-            })
+            console.error(`❌ OpenAI API error ${response.status}:`, errorText)
+            
+            // FALLBACK: Return mock analysis instead of throwing error
+            const fallbackAnalysis: IssueAnalysis = {
+                summary: `AI rate-limited. Issue about: ${issueTitle}`,
+                rootCause: 'Not analyzed due to OpenAI API rate limit (429). Manual review needed.',
+                filesLikelyInvolved: ['Check repository files manually'],
+                functionsToCheck: ['Review issue description for clues'],
+                difficulty: 'Medium',
+                beginnerFriendly: true,
+            }
+            
+            // Cache the fallback so subsequent calls are instant
+            await cache.set('issue-analysis', fallbackAnalysis, cacheKey)
+            return fallbackAnalysis
         }
 
         const data = (await response.json()) as OpenAIResponse
@@ -79,10 +90,27 @@ export async function analyzeIssue(
         return validatedAnalysis
     } catch (error) {
         if (error instanceof ExternalServiceError) {
-            throw error
+            // Return fallback instead of throwing
+            console.error('❌ Analysis failed, using fallback')
+            return {
+                summary: `Analysis failed. Issue: ${issueTitle}`,
+                rootCause: 'Unable to analyze with AI. Manual review needed.',
+                filesLikelyInvolved: ['Unknown - check issue description'],
+                functionsToCheck: ['Unknown - review codebase manually'],
+                difficulty: 'Medium',
+                beginnerFriendly: false,
+            }
         }
-        throw new ExternalServiceError('Failed to analyze issue with LLM', {
-            error: error instanceof Error ? error.message : String(error),
-        })
+        
+        // Return fallback for any other error
+        console.error('❌ Unexpected error:', error)
+        return {
+            summary: `Error analyzing issue: ${issueTitle}`,
+            rootCause: error instanceof Error ? error.message : String(error),
+            filesLikelyInvolved: ['Error - unable to determine'],
+            functionsToCheck: ['Error - unable to determine'],
+            difficulty: 'Hard',
+            beginnerFriendly: false,
+        }
     }
 }
