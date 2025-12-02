@@ -19,12 +19,12 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@motiadev/core": "^0.13.1-beta.162",
-        "@motiadev/plugin-endpoint": "^0.13.1-beta.162",
-        "@motiadev/plugin-logs": "^0.13.1-beta.162",
-        "@motiadev/plugin-observability": "^0.13.1-beta.162",
-        "@motiadev/plugin-states": "^0.13.1-beta.162",
-        "motia": "^0.13.1-beta.162",
+        "@motiadev/core": "0.13.1-beta.162",
+        "@motiadev/plugin-endpoint": "0.13.1-beta.162",
+        "@motiadev/plugin-logs": "0.13.1-beta.162",
+        "@motiadev/plugin-observability": "0.13.1-beta.162",
+        "@motiadev/plugin-states": "0.13.1-beta.162",
+        "motia": "0.13.1-beta.162",
         "zod": "^4.1.12"
     },
     "devDependencies": {

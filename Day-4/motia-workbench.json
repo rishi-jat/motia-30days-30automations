@@ -7,24 +7,24 @@
         "y": -119
       },
       "steps/issue-explain/scan-repo.step.ts": {
-        "x": 607,
-        "y": 203
+        "x": 610,
+        "y": -65
       },
       "steps/issue-explain/pick-issue-api.step.ts": {
-        "x": -51,
-        "y": 20
+        "x": -71,
+        "y": -158
       },
       "steps/issue-explain/generate-fix-guide.step.ts": {
         "x": 1265,
         "y": 204
       },
       "steps/issue-explain/fetch-issues.step.ts": {
-        "x": 548,
-        "y": -505
+        "x": 427,
+        "y": -495
       },
       "steps/issue-explain/fetch-issue-details.step.ts": {
-        "x": 307,
-        "y": -97
+        "x": 304,
+        "y": -223
       },
       "steps/issue-explain/analyze-issue.step.ts": {
         "x": 897,
