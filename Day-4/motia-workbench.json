@@ -11,16 +11,16 @@
         "y": 203
       },
       "steps/issue-explain/pick-issue-api.step.ts": {
-        "x": -83,
-        "y": 30
+        "x": -51,
+        "y": 20
       },
       "steps/issue-explain/generate-fix-guide.step.ts": {
         "x": 1265,
         "y": 204
       },
       "steps/issue-explain/fetch-issues.step.ts": {
-        "x": 592,
-        "y": -265
+        "x": 619,
+        "y": -323
       },
       "steps/issue-explain/fetch-issue-details.step.ts": {
         "x": 307,

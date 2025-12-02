@@ -2,6 +2,16 @@ import { ApiRouteConfig, Handlers } from 'motia'
 import { z } from 'zod'
 import { fetchIssues } from '../../src/services/github'
 
+const issueItemSchema = z.object({
+    id: z.number(),
+    number: z.number(),
+    title: z.string(),
+})
+
+const responseSchema = z.object({
+    issues: z.array(issueItemSchema),
+})
+
 export const config: ApiRouteConfig = {
     type: 'api',
     name: 'FetchIssues',
@@ -11,19 +21,11 @@ export const config: ApiRouteConfig = {
     path: '/issues',
     emits: [],
     responseSchema: {
-        200: z.object({
-            issues: z.array(
-                z.object({
-                    id: z.number(),
-                    number: z.number(),
-                    title: z.string(),
-                })
-            ),
-        }),
+        200: responseSchema,
     },
 }
 
-export const handler: Handlers['FetchIssues'] = async (req, { logger }) => {
+export const handler: Handlers['FetchIssues'] = async (_req, { logger }) => {
     const owner = process.env.GITHUB_OWNER
     const repo = process.env.GITHUB_REPO
     const token = process.env.GITHUB_TOKEN
@@ -39,6 +41,7 @@ export const handler: Handlers['FetchIssues'] = async (req, { logger }) => {
     logger.info('Issues fetched successfully', { count: issues.length })
 
     return {
-        issues,
+        status: 200 as const,
+        body: { issues },
     }
 }

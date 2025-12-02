@@ -2,6 +2,14 @@ import { ExternalServiceError } from '../../errors/external-service.error'
 import { buildFixGuidePrompt } from './prompts'
 import type { FixGuideInput } from './types'
 
+interface OpenAIResponse {
+    choices?: Array<{
+        message?: {
+            content?: string
+        }
+    }>
+}
+
 export async function generateFixGuide(input: FixGuideInput, apiKey: string): Promise<string> {
     try {
         const prompt = buildFixGuidePrompt(input)
@@ -38,9 +46,9 @@ export async function generateFixGuide(input: FixGuideInput, apiKey: string): Pr
             })
         }
 
-        const data = await response.json()
+        const data = (await response.json()) as OpenAIResponse
 
-        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        if (!data.choices?.[0]?.message?.content) {
             throw new ExternalServiceError('Invalid response from OpenAI API', { data })
         }
 

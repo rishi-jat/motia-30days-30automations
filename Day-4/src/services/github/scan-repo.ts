@@ -26,7 +26,7 @@ export async function scanRepo(
             })
         }
 
-        const branchData = await branchResponse.json()
+        const branchData = (await branchResponse.json()) as { commit: { sha: string } }
         const sha = branchData.commit.sha
 
         // Step 2: Get recursive tree
@@ -73,7 +73,7 @@ export async function scanRepo(
                     continue // Skip files that fail
                 }
 
-                const contentData = await contentResponse.json()
+                const contentData = (await contentResponse.json()) as { content: string }
                 const content = Buffer.from(contentData.content, 'base64').toString('utf-8')
 
                 // Get first 80 lines

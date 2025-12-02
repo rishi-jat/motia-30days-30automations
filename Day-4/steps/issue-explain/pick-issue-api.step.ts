@@ -1,6 +1,15 @@
 import { ApiRouteConfig, Handlers } from 'motia'
 import { z } from 'zod'
 
+const bodySchema = z.object({
+    issueNumber: z.number(),
+})
+
+const responseSchema = z.object({
+    message: z.string(),
+    issueNumber: z.number(),
+})
+
 export const config: ApiRouteConfig = {
     type: 'api',
     name: 'PickIssue',
@@ -8,23 +17,22 @@ export const config: ApiRouteConfig = {
     flows: ['issue-explain'],
     method: 'POST',
     path: '/pick-issue',
-    bodySchema: z.object({
-        issueNumber: z.number(),
-    }),
+    bodySchema,
     responseSchema: {
-        200: z.object({
-            message: z.string(),
-            issueNumber: z.number(),
-        }),
+        200: responseSchema,
     },
     emits: ['issue.selected'],
 }
 
 export const handler: Handlers['PickIssue'] = async (req, { logger, emit }) => {
-    const { issueNumber } = req.body as { issueNumber: number }
+    const { issueNumber } = req.body as z.infer<typeof bodySchema>
 
-    const owner = process.env.GITHUB_OWNER || ''
-    const repo = process.env.GITHUB_REPO || ''
+    const owner = process.env.GITHUB_OWNER
+    const repo = process.env.GITHUB_REPO
+
+    if (!owner || !repo) {
+        throw new Error('Missing GITHUB_OWNER or GITHUB_REPO environment variables')
+    }
 
     logger.info('Issue selected for analysis', { issueNumber, owner, repo })
 
@@ -39,7 +47,10 @@ export const handler: Handlers['PickIssue'] = async (req, { logger, emit }) => {
     })
 
     return {
-        message: `Issue #${issueNumber} selected for analysis. Workflow started.`,
-        issueNumber,
+        status: 200 as const,
+        body: {
+            message: `Issue #${issueNumber} selected for analysis. Workflow started.`,
+            issueNumber,
+        },
     }
 }

@@ -38,12 +38,12 @@ export const config: EventConfig = {
     description: 'Generate comprehensive fix guide with AI',
     subscribes: ['issue.analyzed'],
     emits: ['fix-guide.generated'],
-    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['GenerateFixGuide'] = async (input, { logger, emit }) => {
-    const { issue, analysis, files, owner, repo } = input as unknown as z.infer<typeof inputSchema>
+    const parsed = inputSchema.parse(input)
+    const { issue, analysis, files } = parsed
 
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {

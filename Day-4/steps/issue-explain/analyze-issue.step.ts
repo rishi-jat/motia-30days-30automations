@@ -28,12 +28,12 @@ export const config: EventConfig = {
     description: 'Analyze issue with AI to identify root cause and affected files',
     subscribes: ['repo.scanned'],
     emits: ['issue.analyzed'],
-    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['AnalyzeIssue'] = async (input, { logger, emit }) => {
-    const { issue, files, owner, repo } = input as unknown as z.infer<typeof inputSchema>
+    const parsed = inputSchema.parse(input)
+    const { issue, files, owner, repo } = parsed
 
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
