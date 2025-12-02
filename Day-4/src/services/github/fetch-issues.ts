@@ -26,7 +26,7 @@ export async function fetchIssues(
             })
         }
 
-        const data = await response.json()
+        const data = (await response.json()) as any[]
 
         // Validate and map to simple list items
         const issues = data
