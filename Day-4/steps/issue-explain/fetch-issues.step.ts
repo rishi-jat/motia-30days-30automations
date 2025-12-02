@@ -29,8 +29,5 @@ export const handler: Handlers['FetchIssues'] = async (_req, { logger }) => {
 
     logger.info('Issues fetched successfully', { count: issues.length })
 
-    return {
-        status: 200,
-        body: { issues },
-    }
+    return { issues }
 }
