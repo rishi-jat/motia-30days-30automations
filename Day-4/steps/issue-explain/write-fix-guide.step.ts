@@ -15,12 +15,12 @@ export const config: EventConfig = {
     description: 'Write generated fix guide to disk',
     subscribes: ['fix-guide.generated'],
     emits: [],
+    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['WriteFixGuide'] = async (input, { logger }) => {
-    const parsed = inputSchema.parse(input)
-    const { issueNumber, markdown, generatedAt } = parsed
+    const { issueNumber, markdown, generatedAt } = input
 
     const outputDir = process.env.OUTPUT_DIR || './fix-guides'
     const fileName = `issue-${issueNumber}-fix-guide.md`

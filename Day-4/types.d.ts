@@ -12,13 +12,13 @@ declare module 'motia' {
   }
 
   interface Handlers {
-    'WriteFixGuide': EventHandler<never, never>
-    'ScanRepo': EventHandler<never, { topic: 'repo.scanned'; data: never }>
-    'PickIssue': ApiRouteHandler<unknown, ApiResponse<200, unknown>, { topic: 'issue.selected'; data: never }>
-    'GenerateFixGuide': EventHandler<never, { topic: 'fix-guide.generated'; data: never }>
-    'FetchIssues': ApiRouteHandler<Record<string, unknown>, ApiResponse<200, unknown>, never>
-    'FetchIssueDetails': EventHandler<never, { topic: 'issue.details.fetched'; data: never }>
-    'AnalyzeIssue': EventHandler<never, { topic: 'issue.analyzed'; data: never }>
+    'WriteFixGuide': EventHandler<{ issueNumber: number; markdown: string; generatedAt: string }, never>
+    'ScanRepo': EventHandler<{ issue: { id: number; number: number; title: string; body: string | unknown; state: string; html_url: string }; owner: string; repo: string }, { topic: 'repo.scanned'; data: { issue: { id: number; number: number; title: string; body: string | unknown }; files: Array<{ path: string; content: string; lines: number }>; owner: string; repo: string } }>
+    'PickIssue': ApiRouteHandler<{ issueNumber: number }, unknown, { topic: 'issue.selected'; data: { issueNumber: number; owner: string; repo: string; selectedAt: string } }>
+    'GenerateFixGuide': EventHandler<{ issue: { id: number; number: number; title: string; body: string | unknown }; analysis: { summary: string; rootCause: string; filesLikelyInvolved: Array<string>; functionsToCheck: Array<string>; difficulty: 'Easy' | 'Medium' | 'Hard'; beginnerFriendly: boolean }; files: Array<{ path: string; content: string; lines: number }>; owner: string; repo: string }, { topic: 'fix-guide.generated'; data: { issueNumber: number; markdown: string; generatedAt: string } }>
+    'FetchIssues': ApiRouteHandler<Record<string, unknown>, unknown, never>
+    'FetchIssueDetails': EventHandler<{ issueNumber: number; owner: string; repo: string; selectedAt: string }, { topic: 'issue.details.fetched'; data: { issue: { id: number; number: number; title: string; body: string | unknown; state: string; html_url: string }; owner: string; repo: string } }>
+    'AnalyzeIssue': EventHandler<{ issue: { id: number; number: number; title: string; body: string | unknown }; files: Array<{ path: string; content: string; lines: number }>; owner: string; repo: string }, { topic: 'issue.analyzed'; data: { issue: { id: number; number: number; title: string; body: string | unknown }; analysis: { summary: string; rootCause: string; filesLikelyInvolved: Array<string>; functionsToCheck: Array<string>; difficulty: 'Easy' | 'Medium' | 'Hard'; beginnerFriendly: boolean }; files: Array<{ path: string; content: string; lines: number }>; owner: string; repo: string } }>
   }
     
 }

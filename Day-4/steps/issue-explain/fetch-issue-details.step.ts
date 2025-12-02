@@ -6,6 +6,7 @@ const inputSchema = z.object({
     issueNumber: z.number(),
     owner: z.string(),
     repo: z.string(),
+    selectedAt: z.string(),
 })
 
 export const config: EventConfig = {
@@ -14,12 +15,12 @@ export const config: EventConfig = {
     description: 'Fetch full details of selected issue',
     subscribes: ['issue.selected'],
     emits: ['issue.details.fetched'],
+    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['FetchIssueDetails'] = async (input, { logger, emit }) => {
-    const parsed = inputSchema.parse(input)
-    const { issueNumber, owner, repo } = parsed
+    const { issueNumber, owner, repo } = input
 
     const token = process.env.GITHUB_TOKEN
     if (!token) {
