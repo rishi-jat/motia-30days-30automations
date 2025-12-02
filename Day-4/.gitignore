@@ -6,3 +6,7 @@ venv
 .mermaid
 dist
 *.pyc
+.cache
+fix-guides
+dump.rdb
+appendonlydir

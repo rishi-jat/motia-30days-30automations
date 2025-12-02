@@ -1,6 +1,7 @@
 import { ExternalServiceError } from '../../errors/external-service.error'
 import { buildFixGuidePrompt } from './prompts'
 import type { FixGuideInput } from './types'
+import { cache } from '../../cache'
 
 interface OpenAIResponse {
     choices?: Array<{
@@ -12,6 +13,14 @@ interface OpenAIResponse {
 
 export async function generateFixGuide(input: FixGuideInput, apiKey: string): Promise<string> {
     try {
+        // Check cache first
+        const cacheKey = `${input.issueNumber}:${input.issueTitle}`
+        const cached = await cache.get<string>('fix-guide', cacheKey)
+        if (cached) {
+            console.log('✅ Using cached fix guide for issue:', input.issueNumber)
+            return cached
+        }
+
         const prompt = buildFixGuidePrompt(input)
 
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -52,7 +61,12 @@ export async function generateFixGuide(input: FixGuideInput, apiKey: string): Pr
             throw new ExternalServiceError('Invalid response from OpenAI API', { data })
         }
 
-        return data.choices[0].message.content
+        const fixGuide = data.choices[0].message.content
+
+        // Cache the result
+        await cache.set('fix-guide', fixGuide, cacheKey)
+
+        return fixGuide
     } catch (error) {
         if (error instanceof ExternalServiceError) {
             throw error

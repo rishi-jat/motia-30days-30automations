@@ -1,5 +1,6 @@
 import { ExternalServiceError } from '../../errors/external-service.error'
 import { treeResponseSchema, type FileContent } from './types'
+import { cache } from '../../cache'
 
 const CODE_EXTENSIONS = ['.go', '.ts', '.js', '.py', '.md', '.yaml', '.yml', '.json', '.tsx', '.jsx']
 
@@ -10,6 +11,14 @@ export async function scanRepo(
     token: string
 ): Promise<FileContent[]> {
     try {
+        // Check cache first
+        const cacheKey = `${owner}/${repo}/${branch}`
+        const cached = await cache.get<FileContent[]>('repo-scan', cacheKey)
+        if (cached) {
+            console.log('✅ Using cached repo scan for:', cacheKey)
+            return cached
+        }
+
         // Step 1: Get branch SHA
         const branchUrl = `https://api.github.com/repos/${owner}/${repo}/branches/${branch}`
         const branchResponse = await fetch(branchUrl, {
@@ -90,6 +99,9 @@ export async function scanRepo(
                 continue
             }
         }
+
+        // Cache the results
+        await cache.set('repo-scan', files, cacheKey)
 
         return files
     } catch (error) {
