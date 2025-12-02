@@ -75,10 +75,9 @@ export const handler: Handlers['AnalyzeIssueAPI'] = async (req, { logger }) => {
         guideLength: fixGuide.length,
     })
 
-    // Step 4: Write the FIX.md file
-    const outputDir = process.env.OUTPUT_DIR || './fix-guides'
+    // Step 4: Write the FIX.md file to root directory (like Day-3)
     const fileName = `issue-${issue.number}-FIX.md`
-    const filePath = path.resolve(outputDir, fileName)
+    const filePath = path.resolve(fileName)
 
     await writeMarkdown({
         path: filePath,
