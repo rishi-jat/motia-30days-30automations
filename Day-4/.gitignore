@@ -7,6 +7,6 @@ venv
 dist
 *.pyc
 .cache
-fix-guides
+issue-*-FIX.md
 dump.rdb
 appendonlydir

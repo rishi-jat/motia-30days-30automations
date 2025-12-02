@@ -22,9 +22,9 @@ export const config: EventConfig = {
 export const handler: Handlers['WriteFixGuide'] = async (input, { logger }) => {
     const { issueNumber, markdown, generatedAt } = input
 
-    const outputDir = process.env.OUTPUT_DIR || './fix-guides'
-    const fileName = `issue-${issueNumber}-fix-guide.md`
-    const resolvedPath = path.resolve(outputDir, fileName)
+    // Write to root directory like Day-3
+    const fileName = `issue-${issueNumber}-FIX.md`
+    const resolvedPath = path.resolve(fileName)
 
     logger.info('Writing fix guide to disk', {
         issueNumber,
