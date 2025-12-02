@@ -19,7 +19,7 @@ export const config: EventConfig = {
 }
 
 export const handler: Handlers['FetchIssueDetails'] = async (input, { logger, emit }) => {
-    const { issueNumber, owner, repo } = input
+    const { issueNumber, owner, repo } = input as unknown as z.infer<typeof inputSchema>
 
     const token = process.env.GITHUB_TOKEN
     if (!token) {

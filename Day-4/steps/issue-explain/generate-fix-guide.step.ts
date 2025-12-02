@@ -43,7 +43,7 @@ export const config: EventConfig = {
 }
 
 export const handler: Handlers['GenerateFixGuide'] = async (input, { logger, emit }) => {
-    const { issue, analysis, files, owner, repo } = input
+    const { issue, analysis, files, owner, repo } = input as unknown as z.infer<typeof inputSchema>
 
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {

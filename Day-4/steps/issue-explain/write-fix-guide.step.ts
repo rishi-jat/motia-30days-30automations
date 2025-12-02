@@ -20,7 +20,7 @@ export const config: EventConfig = {
 }
 
 export const handler: Handlers['WriteFixGuide'] = async (input, { logger }) => {
-    const { issueNumber, markdown, generatedAt } = input
+    const { issueNumber, markdown, generatedAt } = input as unknown as z.infer<typeof inputSchema>
 
     const outputPath = process.env.OUTPUT_PATH || './FIX_GUIDE.md'
     const resolvedPath = path.resolve(outputPath)

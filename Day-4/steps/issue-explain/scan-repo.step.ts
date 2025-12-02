@@ -28,7 +28,7 @@ export const config: EventConfig = {
 }
 
 export const handler: Handlers['ScanRepo'] = async (input, { logger, emit }) => {
-    const { issue, owner, repo } = input
+    const { issue, owner, repo } = input as unknown as z.infer<typeof inputSchema>
 
     const token = process.env.GITHUB_TOKEN
     const branch = process.env.GITHUB_BRANCH || 'main'

@@ -33,7 +33,7 @@ export const config: EventConfig = {
 }
 
 export const handler: Handlers['AnalyzeIssue'] = async (input, { logger, emit }) => {
-    const { issue, files, owner, repo } = input
+    const { issue, files, owner, repo } = input as unknown as z.infer<typeof inputSchema>
 
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
