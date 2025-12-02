@@ -15,15 +15,16 @@ export const config: EventConfig = {
     description: 'Write generated fix guide to disk',
     subscribes: ['fix-guide.generated'],
     emits: [],
-    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['WriteFixGuide'] = async (input, { logger }) => {
-    const { issueNumber, markdown, generatedAt } = input as unknown as z.infer<typeof inputSchema>
+    const parsed = inputSchema.parse(input)
+    const { issueNumber, markdown, generatedAt } = parsed
 
-    const outputPath = process.env.OUTPUT_PATH || './FIX_GUIDE.md'
-    const resolvedPath = path.resolve(outputPath)
+    const outputDir = process.env.OUTPUT_DIR || './fix-guides'
+    const fileName = `issue-${issueNumber}-fix-guide.md`
+    const resolvedPath = path.resolve(outputDir, fileName)
 
     logger.info('Writing fix guide to disk', {
         issueNumber,

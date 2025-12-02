@@ -23,12 +23,12 @@ export const config: EventConfig = {
     description: 'Scan repository files for analysis',
     subscribes: ['issue.details.fetched'],
     emits: ['repo.scanned'],
-    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['ScanRepo'] = async (input, { logger, emit }) => {
-    const { issue, owner, repo } = input as unknown as z.infer<typeof inputSchema>
+    const parsed = inputSchema.parse(input)
+    const { issue, owner, repo } = parsed
 
     const token = process.env.GITHUB_TOKEN
     const branch = process.env.GITHUB_BRANCH || 'main'

@@ -12,13 +12,13 @@ declare module 'motia' {
   }
 
   interface Handlers {
-    'WriteFixGuide': EventHandler<unknown, never>
-    'ScanRepo': EventHandler<unknown, { topic: 'repo.scanned'; data: unknown }>
-    'PickIssue': ApiRouteHandler<unknown, ApiResponse<200, unknown>, { topic: 'issue.selected'; data: unknown }>
-    'GenerateFixGuide': EventHandler<unknown, { topic: 'fix-guide.generated'; data: unknown }>
+    'WriteFixGuide': EventHandler<never, never>
+    'ScanRepo': EventHandler<never, { topic: 'repo.scanned'; data: never }>
+    'PickIssue': ApiRouteHandler<unknown, ApiResponse<200, unknown>, { topic: 'issue.selected'; data: never }>
+    'GenerateFixGuide': EventHandler<never, { topic: 'fix-guide.generated'; data: never }>
     'FetchIssues': ApiRouteHandler<Record<string, unknown>, ApiResponse<200, unknown>, never>
-    'FetchIssueDetails': EventHandler<unknown, { topic: 'issue.details.fetched'; data: unknown }>
-    'AnalyzeIssue': EventHandler<unknown, { topic: 'issue.analyzed'; data: unknown }>
+    'FetchIssueDetails': EventHandler<never, { topic: 'issue.details.fetched'; data: never }>
+    'AnalyzeIssue': EventHandler<never, { topic: 'issue.analyzed'; data: never }>
   }
     
 }

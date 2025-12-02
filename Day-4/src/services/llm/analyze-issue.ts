@@ -2,6 +2,14 @@ import { ExternalServiceError } from '../../errors/external-service.error'
 import { buildAnalysisPrompt } from './prompts'
 import { issueAnalysisSchema, type IssueAnalysis } from './types'
 
+interface OpenAIResponse {
+    choices?: Array<{
+        message?: {
+            content?: string
+        }
+    }>
+}
+
 export async function analyzeIssue(
     issueTitle: string,
     issueBody: string | null,
@@ -44,9 +52,9 @@ export async function analyzeIssue(
             })
         }
 
-        const data = await response.json()
+        const data = (await response.json()) as OpenAIResponse
 
-        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        if (!data.choices?.[0]?.message?.content) {
             throw new ExternalServiceError('Invalid response from OpenAI API', { data })
         }
 
