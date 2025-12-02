@@ -41,7 +41,10 @@ export const handler: Handlers['PickIssue'] = async (req, { logger, emit }) => {
     })
 
     return {
-        message: `Issue #${issueNumber} selected for analysis. Workflow started.`,
-        issueNumber,
+        status: 200,
+        body: {
+            message: `Issue #${issueNumber} selected for analysis. Workflow started.`,
+            issueNumber,
+        },
     }
 }

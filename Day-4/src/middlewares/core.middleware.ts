@@ -7,21 +7,22 @@ export const coreMiddleware: ApiMiddleware = async (req, ctx, next) => {
 
     try {
         return await next()
-    } catch (error: unknown) {
+    } catch (error: any) {
         if (error instanceof ZodError) {
             logger.error('Validation error', {
-                issues: error.issues,
+                error,
+                stack: error.stack,
+                errors: error.errors,
             })
+
             return {
                 status: 400,
                 body: {
                     error: 'Invalid request body',
-                    data: error.issues,
+                    data: error.errors,
                 },
             }
-        }
-
-        if (error instanceof BaseError) {
+        } else if (error instanceof BaseError) {
             logger.error('BaseError', {
                 status: error.status,
                 code: error.code,
@@ -29,12 +30,16 @@ export const coreMiddleware: ApiMiddleware = async (req, ctx, next) => {
                 name: error.name,
                 message: error.message,
             })
+
             return { status: error.status, body: error.toJSON() }
         }
 
-        logger.error('Unexpected error', {
-            error: error instanceof Error ? error.message : String(error),
+        logger.error('Error while performing request', {
+            error,
+            body: req.body,
+            stack: error.stack,
         })
+
         return { status: 500, body: { error: 'Internal Server Error' } }
     }
 }
