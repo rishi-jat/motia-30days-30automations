@@ -21,7 +21,7 @@ export const config: ApiRouteConfig = {
 }
 
 export const handler: Handlers['PickIssue'] = async (req, { logger, emit }) => {
-    const { issueNumber } = req.body
+    const { issueNumber } = req.body as { issueNumber: number }
 
     const owner = process.env.GITHUB_OWNER || ''
     const repo = process.env.GITHUB_REPO || ''
