@@ -2,32 +2,26 @@ import { EventConfig, Handlers } from 'motia'
 import { z } from 'zod'
 import { generateFixGuide } from '../../src/services/llm'
 
-const issueSchema = z.object({
-    id: z.number(),
-    number: z.number(),
-    title: z.string(),
-    body: z.string().nullable(),
-})
-
-const analysisSchema = z.object({
-    summary: z.string(),
-    rootCause: z.string(),
-    filesLikelyInvolved: z.array(z.string()),
-    functionsToCheck: z.array(z.string()),
-    difficulty: z.enum(['Easy', 'Medium', 'Hard']),
-    beginnerFriendly: z.boolean(),
-})
-
-const fileSchema = z.object({
-    path: z.string(),
-    content: z.string(),
-    lines: z.number(),
-})
-
 const inputSchema = z.object({
-    issue: issueSchema,
-    analysis: analysisSchema,
-    files: z.array(fileSchema),
+    issue: z.object({
+        id: z.number(),
+        number: z.number(),
+        title: z.string(),
+        body: z.string().nullable(),
+    }),
+    analysis: z.object({
+        summary: z.string(),
+        rootCause: z.string(),
+        filesLikelyInvolved: z.array(z.string()),
+        functionsToCheck: z.array(z.string()),
+        difficulty: z.enum(['Easy', 'Medium', 'Hard']),
+        beginnerFriendly: z.boolean(),
+    }),
+    files: z.array(z.object({
+        path: z.string(),
+        content: z.string(),
+        lines: z.number(),
+    })),
     owner: z.string(),
     repo: z.string(),
 })
@@ -38,12 +32,12 @@ export const config: EventConfig = {
     description: 'Generate comprehensive fix guide with AI',
     subscribes: ['issue.analyzed'],
     emits: ['fix-guide.generated'],
+    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['GenerateFixGuide'] = async (input, { logger, emit }) => {
-    const parsed = inputSchema.parse(input)
-    const { issue, analysis, files } = parsed
+    const { issue, analysis, files } = input
 
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
@@ -55,11 +49,13 @@ export const handler: Handlers['GenerateFixGuide'] = async (input, { logger, emi
         difficulty: analysis.difficulty,
     })
 
+    const issueBody = typeof issue.body === 'string' ? issue.body : ''
+    
     const fixGuide = await generateFixGuide(
         {
             issueNumber: issue.number,
             issueTitle: issue.title,
-            issueBody: issue.body || '',
+            issueBody,
             analysis,
             repoFiles: files,
         },

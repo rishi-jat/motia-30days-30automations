@@ -1,12 +1,8 @@
 import { ApiRouteConfig, Handlers } from 'motia'
 import { z } from 'zod'
+import { coreMiddleware } from '../../src/middlewares/core.middleware'
 
 const bodySchema = z.object({
-    issueNumber: z.number(),
-})
-
-const responseSchema = z.object({
-    message: z.string(),
     issueNumber: z.number(),
 })
 
@@ -18,10 +14,8 @@ export const config: ApiRouteConfig = {
     method: 'POST',
     path: '/pick-issue',
     bodySchema,
-    responseSchema: {
-        200: responseSchema,
-    },
     emits: ['issue.selected'],
+    middleware: [coreMiddleware],
 }
 
 export const handler: Handlers['PickIssue'] = async (req, { logger, emit }) => {
@@ -47,7 +41,7 @@ export const handler: Handlers['PickIssue'] = async (req, { logger, emit }) => {
     })
 
     return {
-        status: 200 as const,
+        status: 200,
         body: {
             message: `Issue #${issueNumber} selected for analysis. Workflow started.`,
             issueNumber,

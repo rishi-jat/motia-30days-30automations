@@ -10,13 +10,13 @@ export const coreMiddleware: ApiMiddleware = async (req, ctx, next) => {
     } catch (error: unknown) {
         if (error instanceof ZodError) {
             logger.error('Validation error', {
-                errors: error.errors,
+                issues: error.issues,
             })
             return {
                 status: 400,
                 body: {
                     error: 'Invalid request body',
-                    data: error.errors,
+                    data: error.issues,
                 },
             }
         }

@@ -19,8 +19,8 @@
         "y": 204
       },
       "steps/issue-explain/fetch-issues.step.ts": {
-        "x": 619,
-        "y": -323
+        "x": 548,
+        "y": -505
       },
       "steps/issue-explain/fetch-issue-details.step.ts": {
         "x": 307,

@@ -2,22 +2,18 @@ import { EventConfig, Handlers } from 'motia'
 import { z } from 'zod'
 import { analyzeIssue } from '../../src/services/llm'
 
-const issueSchema = z.object({
-    id: z.number(),
-    number: z.number(),
-    title: z.string(),
-    body: z.string().nullable(),
-})
-
-const fileSchema = z.object({
-    path: z.string(),
-    content: z.string(),
-    lines: z.number(),
-})
-
 const inputSchema = z.object({
-    issue: issueSchema,
-    files: z.array(fileSchema),
+    issue: z.object({
+        id: z.number(),
+        number: z.number(),
+        title: z.string(),
+        body: z.string().nullable(),
+    }),
+    files: z.array(z.object({
+        path: z.string(),
+        content: z.string(),
+        lines: z.number(),
+    })),
     owner: z.string(),
     repo: z.string(),
 })
@@ -28,12 +24,12 @@ export const config: EventConfig = {
     description: 'Analyze issue with AI to identify root cause and affected files',
     subscribes: ['repo.scanned'],
     emits: ['issue.analyzed'],
+    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['AnalyzeIssue'] = async (input, { logger, emit }) => {
-    const parsed = inputSchema.parse(input)
-    const { issue, files, owner, repo } = parsed
+    const { issue, files, owner, repo } = input
 
     const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
@@ -45,7 +41,8 @@ export const handler: Handlers['AnalyzeIssue'] = async (input, { logger, emit })
         fileCount: files.length,
     })
 
-    const analysis = await analyzeIssue(issue.title, issue.body, files, apiKey)
+    const issueBody = typeof issue.body === 'string' ? issue.body : null
+    const analysis = await analyzeIssue(issue.title, issueBody, files, apiKey)
 
     logger.info('Issue analysis complete', {
         issueNumber: issue.number,
@@ -63,14 +60,7 @@ export const handler: Handlers['AnalyzeIssue'] = async (input, { logger, emit })
                 title: issue.title,
                 body: issue.body,
             },
-            analysis: {
-                summary: analysis.summary,
-                rootCause: analysis.rootCause,
-                filesLikelyInvolved: analysis.filesLikelyInvolved,
-                functionsToCheck: analysis.functionsToCheck,
-                difficulty: analysis.difficulty,
-                beginnerFriendly: analysis.beginnerFriendly,
-            },
+            analysis,
             files,
             owner,
             repo,

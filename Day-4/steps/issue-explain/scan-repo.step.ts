@@ -2,17 +2,15 @@ import { EventConfig, Handlers } from 'motia'
 import { z } from 'zod'
 import { scanRepo } from '../../src/services/github'
 
-const issueSchema = z.object({
-    id: z.number(),
-    number: z.number(),
-    title: z.string(),
-    body: z.string().nullable(),
-    state: z.string(),
-    html_url: z.string(),
-})
-
 const inputSchema = z.object({
-    issue: issueSchema,
+    issue: z.object({
+        id: z.number(),
+        number: z.number(),
+        title: z.string(),
+        body: z.string().nullable(),
+        state: z.string(),
+        html_url: z.string(),
+    }),
     owner: z.string(),
     repo: z.string(),
 })
@@ -23,12 +21,12 @@ export const config: EventConfig = {
     description: 'Scan repository files for analysis',
     subscribes: ['issue.details.fetched'],
     emits: ['repo.scanned'],
+    input: inputSchema,
     flows: ['issue-explain'],
 }
 
 export const handler: Handlers['ScanRepo'] = async (input, { logger, emit }) => {
-    const parsed = inputSchema.parse(input)
-    const { issue, owner, repo } = parsed
+    const { issue, owner, repo } = input
 
     const token = process.env.GITHUB_TOKEN
     const branch = process.env.GITHUB_BRANCH || 'main'
