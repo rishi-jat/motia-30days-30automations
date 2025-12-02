@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { ExternalServiceError } from '../../errors/external-service.error'
 import { issueListItemSchema, type IssueListItem } from './types'
 

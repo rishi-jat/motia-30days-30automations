@@ -1,0 +1,35 @@
+[
+  {
+    "id": "issue-explain",
+    "config": {
+      "steps/issue-explain/write-fix-guide.step.ts": {
+        "x": 1576,
+        "y": -9
+      },
+      "steps/issue-explain/scan-repo.step.ts": {
+        "x": 673,
+        "y": -72
+      },
+      "steps/issue-explain/pick-issue-api.step.ts": {
+        "x": -75,
+        "y": -64
+      },
+      "steps/issue-explain/generate-fix-guide.step.ts": {
+        "x": 1245,
+        "y": 179
+      },
+      "steps/issue-explain/fetch-issues.step.ts": {
+        "x": 1,
+        "y": 225
+      },
+      "steps/issue-explain/fetch-issue-details.step.ts": {
+        "x": 322,
+        "y": -57
+      },
+      "steps/issue-explain/analyze-issue.step.ts": {
+        "x": 847,
+        "y": 62
+      }
+    }
+  }
+]
