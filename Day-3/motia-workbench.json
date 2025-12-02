@@ -95,12 +95,12 @@
         "y": -306
       },
       "steps/auto-doc/fetch-repo-tree.step.ts": {
-        "x": 256,
-        "y": -108
+        "x": 273,
+        "y": -91
       },
       "steps/auto-doc/fetch-file-list.step.ts": {
-        "x": 456,
-        "y": -309
+        "x": 452,
+        "y": -317
       },
       "steps/auto-doc/cron-trigger.step.ts": {
         "x": -113,
