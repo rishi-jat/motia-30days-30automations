@@ -3,24 +3,24 @@
     "id": "issue-explain",
     "config": {
       "steps/issue-explain/write-fix-guide.step.ts": {
-        "x": 1235,
-        "y": -201
+        "x": 1218,
+        "y": -204
       },
       "steps/issue-explain/pick-issue-api.step.ts": {
         "x": -136,
         "y": -247
       },
       "steps/issue-explain/fetch-issues.step.ts": {
-        "x": -2060,
-        "y": -371
+        "x": -11942,
+        "y": -2841
       },
       "steps/issue-explain/fetch-issue-details.step.ts": {
-        "x": 297,
+        "x": 296,
         "y": -214
       },
       "steps/issue-explain/analyze-issue.step.ts": {
-        "x": 754,
-        "y": -211
+        "x": 755,
+        "y": -214
       }
     }
   }
