@@ -17,6 +17,7 @@ declare module 'motia' {
     'FetchIssues': ApiRouteHandler<Record<string, unknown>, unknown, never>
     'FetchIssueDetails': EventHandler<{ issueNumber: number; owner: string; repo: string; selectedAt: string }, { topic: 'issue.ready'; data: { issue: { id: number; number: number; title: string; body: string | unknown; state?: string; html_url?: string }; files: Array<{ path: string; content: string; lines: number }>; owner: string; repo: string } }>
     'AnalyzeIssue': EventHandler<{ issue: { id: number; number: number; title: string; body: string | unknown; state?: string; html_url?: string }; files: Array<{ path: string; content: string; lines: number }>; owner: string; repo: string }, { topic: 'fix-guide.generated'; data: { issueNumber: number; markdown: string; generatedAt: string } }>
+    'AnalyzeIssueAPI': ApiRouteHandler<{ issueNumber: number }, unknown, never>
   }
     
 }

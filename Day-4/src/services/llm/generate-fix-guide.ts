@@ -49,10 +49,53 @@ export async function generateFixGuide(input: FixGuideInput, apiKey: string): Pr
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new ExternalServiceError(`OpenAI API returned ${response.status}`, {
-                status: response.status,
-                error: errorText,
-            })
+            console.error(`❌ OpenAI API error ${response.status}:`, errorText)
+            
+            // FALLBACK: Generate basic fix guide from analysis
+            const fallbackGuide = `# Fix Guide for Issue #${input.issueNumber}
+
+## 📋 Issue
+**Title:** ${input.issueTitle}
+
+**Description:**
+${input.issueBody || 'No description provided'}
+
+---
+
+## ⚠️ Note
+AI-powered fix guide generation is temporarily unavailable (OpenAI API rate limit).
+
+## 🔍 Analysis Summary
+${input.analysis.summary}
+
+## 🐛 Root Cause
+${input.analysis.rootCause}
+
+## 📂 Files to Check
+${input.analysis.filesLikelyInvolved.map((f, i) => `${i + 1}. \`${f}\``).join('\n')}
+
+## 🔧 Functions to Review
+${input.analysis.functionsToCheck.map((f, i) => `${i + 1}. \`${f}\``).join('\n')}
+
+## 📊 Difficulty
+**${input.analysis.difficulty}** ${input.analysis.beginnerFriendly ? '✅ Beginner Friendly' : '⚠️ Advanced'}
+
+## 💡 Next Steps
+1. Read the issue description carefully
+2. Review the files listed above
+3. Check the functions mentioned
+4. Implement the required changes
+5. Test your solution
+6. Submit a pull request
+
+---
+*Generated: ${new Date().toISOString()}*
+*Note: This is a fallback guide. For detailed AI analysis, ensure OpenAI API key is valid.*
+`
+            
+            // Cache the fallback
+            await cache.set('fix-guide', fallbackGuide, cacheKey)
+            return fallbackGuide
         }
 
         const data = (await response.json()) as OpenAIResponse
@@ -68,11 +111,28 @@ export async function generateFixGuide(input: FixGuideInput, apiKey: string): Pr
 
         return fixGuide
     } catch (error) {
-        if (error instanceof ExternalServiceError) {
-            throw error
-        }
-        throw new ExternalServiceError('Failed to generate fix guide with LLM', {
-            error: error instanceof Error ? error.message : String(error),
-        })
+        // Always return something useful instead of throwing
+        console.error('❌ Fix guide generation failed, using fallback')
+        
+        const fallbackGuide = `# Fix Guide for Issue #${input.issueNumber}
+
+## Issue: ${input.issueTitle}
+
+**Error:** Unable to generate AI-powered fix guide.
+
+${input.issueBody ? `**Description:**\n${input.issueBody}\n` : ''}
+
+## Manual Steps
+1. Review the issue description above
+2. Check the repository code
+3. Identify the files that need changes
+4. Implement the fix
+5. Test thoroughly
+6. Submit a pull request
+
+---
+*Generated: ${new Date().toISOString()}*
+`
+        return fallbackGuide
     }
 }
