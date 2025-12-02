@@ -1,6 +1,7 @@
 import { ExternalServiceError } from '../../errors/external-service.error'
 import { buildAnalysisPrompt } from './prompts'
 import { issueAnalysisSchema, type IssueAnalysis } from './types'
+import { cache } from '../../cache'
 
 interface OpenAIResponse {
     choices?: Array<{
@@ -17,6 +18,14 @@ export async function analyzeIssue(
     apiKey: string
 ): Promise<IssueAnalysis> {
     try {
+        // Check cache first
+        const cacheKey = `analyze-issue:${issueTitle}:${issueBody}:${files.length}`
+        const cached = await cache.get<IssueAnalysis>('issue-analysis', cacheKey)
+        if (cached) {
+            console.log('✅ Using cached analysis for issue:', issueTitle)
+            return cached
+        }
+
         const prompt = buildAnalysisPrompt(issueTitle, issueBody, files)
 
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -62,7 +71,12 @@ export async function analyzeIssue(
         const analysis = JSON.parse(content)
 
         // Validate with Zod
-        return issueAnalysisSchema.parse(analysis)
+        const validatedAnalysis = issueAnalysisSchema.parse(analysis)
+
+        // Cache the result
+        await cache.set('issue-analysis', validatedAnalysis, cacheKey)
+
+        return validatedAnalysis
     } catch (error) {
         if (error instanceof ExternalServiceError) {
             throw error

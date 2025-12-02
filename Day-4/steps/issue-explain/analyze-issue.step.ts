@@ -1,6 +1,6 @@
 import { EventConfig, Handlers } from 'motia'
 import { z } from 'zod'
-import { analyzeIssue } from '../../src/services/llm'
+import { analyzeIssue, generateFixGuide } from '../../src/services/llm'
 
 const inputSchema = z.object({
     issue: z.object({
@@ -8,6 +8,8 @@ const inputSchema = z.object({
         number: z.number(),
         title: z.string(),
         body: z.string().nullable(),
+        state: z.string().optional(),
+        html_url: z.string().optional(),
     }),
     files: z.array(z.object({
         path: z.string(),
@@ -21,9 +23,9 @@ const inputSchema = z.object({
 export const config: EventConfig = {
     type: 'event',
     name: 'AnalyzeIssue',
-    description: 'Analyze issue with AI to identify root cause and affected files',
-    subscribes: ['repo.scanned'],
-    emits: ['issue.analyzed'],
+    description: 'Analyze issue with AI and generate comprehensive fix guide',
+    subscribes: ['issue.ready'],
+    emits: ['fix-guide.generated'],
     input: inputSchema,
     flows: ['issue-explain'],
 }
@@ -42,28 +44,39 @@ export const handler: Handlers['AnalyzeIssue'] = async (input, { logger, emit })
     })
 
     const issueBody = typeof issue.body === 'string' ? issue.body : null
+    
+    // Analyze issue
     const analysis = await analyzeIssue(issue.title, issueBody, files, apiKey)
 
-    logger.info('Issue analysis complete', {
+    logger.info('Analysis complete, generating fix guide', {
         issueNumber: issue.number,
         difficulty: analysis.difficulty,
         beginnerFriendly: analysis.beginnerFriendly,
-        filesInvolved: analysis.filesLikelyInvolved.length,
+    })
+
+    // Generate fix guide
+    const fixGuide = await generateFixGuide(
+        {
+            issueNumber: issue.number,
+            issueTitle: issue.title,
+            issueBody: issueBody || '',
+            analysis,
+            repoFiles: files,
+        },
+        apiKey
+    )
+
+    logger.info('Fix guide generated', {
+        issueNumber: issue.number,
+        guideLength: fixGuide.length,
     })
 
     await emit({
-        topic: 'issue.analyzed',
+        topic: 'fix-guide.generated',
         data: {
-            issue: {
-                id: issue.id,
-                number: issue.number,
-                title: issue.title,
-                body: issue.body,
-            },
-            analysis,
-            files,
-            owner,
-            repo,
+            issueNumber: issue.number,
+            markdown: fixGuide,
+            generatedAt: new Date().toISOString(),
         },
     })
 }

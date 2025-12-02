@@ -1,6 +1,7 @@
 import { ExternalServiceError } from '../../errors/external-service.error'
 import { NotFoundError } from '../../errors/not-found.error'
 import { issueSchema, type Issue } from './types'
+import { cache } from '../../cache'
 
 export async function fetchIssueDetails(
     owner: string,
@@ -9,6 +10,14 @@ export async function fetchIssueDetails(
     token: string
 ): Promise<Issue> {
     try {
+        // Check cache first
+        const cacheKey = `${owner}/${repo}/issues/${issueNumber}`
+        const cached = await cache.get<Issue>('issue-details', cacheKey)
+        if (cached) {
+            console.log('✅ Using cached issue details for:', issueNumber)
+            return cached
+        }
+
         const url = `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}`
 
         const response = await fetch(url, {
@@ -38,7 +47,12 @@ export async function fetchIssueDetails(
         const data = await response.json()
 
         // Validate schema
-        return issueSchema.parse(data)
+        const issue = issueSchema.parse(data)
+
+        // Cache the result
+        await cache.set('issue-details', issue, cacheKey)
+
+        return issue
     } catch (error) {
         if (error instanceof NotFoundError || error instanceof ExternalServiceError) {
             throw error
