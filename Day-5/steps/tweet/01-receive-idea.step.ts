@@ -15,22 +15,30 @@ export const config: ApiRouteConfig = {
     type: 'api',
     name: 'ReceiveTweetIdea',
     description: 'POST /tweet - Receives a tweet idea and starts the workflow',
-    flows: ['day-5-ai-x-auto-posting'],
+    flows: ['ai-x-auto-posting'],
     method: 'POST',
     path: '/tweet',
+    bodySchema: TweetIdeaInputSchema,
+    responseSchema: {
+        200: z.object({
+            success: z.boolean(),
+            message: z.string(),
+            idea: z.string(),
+        }),
+        400: z.object({
+            success: z.boolean(),
+            error: z.string(),
+        }),
+    },
     emits: ['tweet.idea.received'],
 };
 
 export const handler: Handlers['ReceiveTweetIdea'] = async (req, { logger, emit }) => {
     try {
-        const input = req.body;
-
-        // Validate input
-        const validated = TweetIdeaInputSchema.parse(input);
+        const validated = TweetIdeaInputSchema.parse(req.body);
 
         logger.info('Tweet idea received', { idea: validated.idea });
 
-        // Emit event to trigger next step
         await emit({
             topic: 'tweet.idea.received',
             data: {

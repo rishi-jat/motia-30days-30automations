@@ -4,9 +4,9 @@
  */
 
 import { writeFile } from 'fs/promises';
-import { FileWriteError } from '../../errors/tweet-errors.js';
-import type { TweetVariation } from '../ai/generate-tweet.js';
-import type { TweetResult } from '../xapi/types.js';
+import { FileWriteError } from '../../errors/tweet-errors';
+import type { TweetVariation } from '../ai/generate-tweet';
+import type { TweetResult } from '../xapi/types';
 
 export interface TweetResultData {
     originalIdea: string;

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "hello-world-flow",
+    "config": {
+      "steps/hello/process-greeting.step.ts": {
+        "x": 409,
+        "y": 44
+      },
+      "steps/hello/hello-api.step.ts": {
+        "x": 0,
+        "y": 0,
+        "sourceHandlePosition": "right"
+      }
+    }
+  },
+  {
+    "id": "ai-x-auto-posting",
+    "config": {
+      "steps/tweet/05-write-result.step.ts": {
+        "x": 1358,
+        "y": 43
+      },
+      "steps/tweet/04-post-tweet.step.ts": {
+        "x": 1053,
+        "y": 43
+      },
+      "steps/tweet/03-select-best.step.ts": {
+        "x": 702,
+        "y": 33
+      },
+      "steps/tweet/02-generate-variations.step.ts": {
+        "x": 351,
+        "y": 33
+      },
+      "steps/tweet/01-receive-idea.step.ts": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  }
+]

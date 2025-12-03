@@ -5,11 +5,10 @@
 
 import { EventConfig, Handlers } from 'motia';
 import { z } from 'zod';
-import { writeTweetResult } from '../../src/services/file/write-result.js';
-import { TweetVariationSchema } from '../../src/services/ai/generate-tweet.js';
-import { FileWriteError } from '../../src/errors/tweet-errors.js';
+import { writeTweetResult } from '../../src/services/file/write-result';
+import { TweetVariationSchema } from '../../src/services/ai/generate-tweet';
+import { FileWriteError } from '../../src/errors/tweet-errors';
 
-// Input schema
 const WriteResultInputSchema = z.object({
     original: z.string(),
     allVariations: z.array(TweetVariationSchema),
@@ -27,7 +26,7 @@ export const config: EventConfig = {
     type: 'event',
     name: 'WriteTweetResult',
     description: 'Write TWEET_RESULT.md file with all data',
-    flows: ['day-5-ai-x-auto-posting'],
+    flows: ['ai-x-auto-posting'],
     subscribes: ['tweet.posted.success'],
     emits: [],
     input: WriteResultInputSchema,

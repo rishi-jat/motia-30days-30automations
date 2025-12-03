@@ -1,29 +1,8 @@
-# Dependencies
-node_modules/
-
-# Build output
-dist/
-
-# Environment variables
-.env
-.env.local
-
-# Generated files
-TWEET_RESULT.md
-
-# Logs
-*.log
-logs/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Motia
-.motia/
+node_modules
+python_modules
+.venv
+venv
+.motia
+.mermaid
+dist
+*.pyc
