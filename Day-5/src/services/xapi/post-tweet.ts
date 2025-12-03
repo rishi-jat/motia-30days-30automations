@@ -4,8 +4,8 @@
  */
 
 import { z } from 'zod';
-import { XAPIError } from '../../errors/tweet-errors.js';
-import type { XAPITweetRequest, XAPITweetResponse, TweetResult } from './types.js';
+import { XAPIError } from '../../errors/tweet-errors';
+import type { XAPITweetRequest, XAPITweetResponse, TweetResult } from './types';
 
 // Validation schema
 const TweetTextSchema = z.string().min(1).max(280);
@@ -66,8 +66,6 @@ export async function postTweet(text: string): Promise<TweetResult> {
             throw new XAPIError('Invalid response from X API: missing tweet ID');
         }
 
-        // Construct tweet URL (assuming we know the username or use a placeholder)
-        // In production, you might want to fetch the user's username first
         const tweetUrl = `https://x.com/i/status/${data.data.id}`;
 
         return {
@@ -84,32 +82,5 @@ export async function postTweet(text: string): Promise<TweetResult> {
         throw new XAPIError(
             `Failed to post tweet: ${error instanceof Error ? error.message : 'Unknown error'}`
         );
-    }
-}
-
-/**
- * Get authenticated user info (optional, for getting username)
- */
-export async function getAuthenticatedUser(): Promise<{ id: string; username: string } | null> {
-    try {
-        const bearerToken = process.env.X_BEARER_TOKEN;
-        if (!bearerToken) {
-            return null;
-        }
-
-        const response = await fetch('https://api.twitter.com/2/users/me', {
-            headers: {
-                'Authorization': `Bearer ${bearerToken}`,
-            },
-        });
-
-        if (!response.ok) {
-            return null;
-        }
-
-        const data = await response.json();
-        return data.data || null;
-    } catch {
-        return null;
     }
 }

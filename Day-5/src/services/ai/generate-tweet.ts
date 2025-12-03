@@ -5,7 +5,7 @@
 
 import OpenAI from 'openai';
 import { z } from 'zod';
-import { AIGenerationError, TweetValidationError } from '../../errors/tweet-errors.js';
+import { AIGenerationError, TweetValidationError } from '../../errors/tweet-errors';
 
 // Validation schemas
 export const TweetIdeaSchema = z.object({

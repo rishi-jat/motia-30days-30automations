@@ -16,7 +16,7 @@ declare module 'motia' {
     'PostTweetToX': EventHandler<{ original: string; allVariations: Array<{ text: string; length: number; hasHashtags: boolean }>; selectedTweet: { text: string; length: number; hasHashtags: boolean } }, { topic: 'tweet.posted.success'; data: { original: string; allVariations: Array<{ text: string; length: number; hasHashtags: boolean }>; selectedTweet: { text: string; length: number; hasHashtags: boolean }; postResult: { tweetId: string; tweetUrl: string; text: string; timestamp: string; isMock: boolean } } }>
     'SelectBestTweet': EventHandler<{ original: string; variations: Array<{ text: string; length: number; hasHashtags: boolean }>; cached?: boolean }, { topic: 'tweet.best.selected'; data: { original: string; allVariations: Array<{ text: string; length: number; hasHashtags: boolean }>; selectedTweet: { text: string; length: number; hasHashtags: boolean } } }>
     'GenerateTweetVariations': EventHandler<{ idea: string; receivedAt: string }, { topic: 'tweet.variations.generated'; data: { original: string; variations: Array<{ text: string; length: number; hasHashtags: boolean }>; cached?: boolean } }>
-    'ReceiveTweetIdea': ApiRouteHandler<Record<string, unknown>, unknown, { topic: 'tweet.idea.received'; data: { idea: string; receivedAt: string } }>
+    'ReceiveTweetIdea': ApiRouteHandler<{ idea: string }, ApiResponse<200, { success: boolean; message: string; idea: string }> | ApiResponse<400, { success: boolean; error: string }>, { topic: 'tweet.idea.received'; data: { idea: string; receivedAt: string } }>
   }
     
 }

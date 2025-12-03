@@ -1,416 +1,77 @@
-# 🚀 Day-5: AI X (Twitter) Auto-Posting Workflow
+# Day-5
 
-**Part of #30Days30Automations Challenge**
+A Motia project created with the starter template.
 
-Source inspiration: **n8n AI tweet generator → Motia implementation**
+## What is Motia?
 
----
+Motia is an open-source, unified backend framework that eliminates runtime fragmentation by bringing **APIs, background jobs, queueing, streaming, state, workflows, AI agents, observability, scaling, and deployment** into one unified system using a single core primitive, the **Step**.
 
-## 📖 Overview
-
-Day-5 converts a common **n8n workflow** into a production-ready Motia automation that:
-
-1. ✅ Accepts a POST request with a "tweet idea"
-2. 🤖 AI generates 3 improved tweet variations
-3. 🎯 Automatically selects the best version
-4. 🐦 Posts to X (Twitter) using X API v2
-5. 📝 Writes a `TWEET_RESULT.md` file locally
-6. 🔗 Returns the tweet URL + selected text
-
-### Key Features
-
-- **AI-Powered Generation**: Uses OpenAI GPT-4 to create engaging tweets
-- **Smart Selection**: Automatically picks the best variation
-- **Mock Mode**: Test without posting to real X API
-- **Caching**: Efficient AI response caching (1-hour TTL)
-- **Full DDD Architecture**: Clean service boundaries
-- **Type-Safe**: Zod validation throughout
-- **Error Handling**: Custom error classes for each layer
-
----
-
-## 🏗️ Architecture
-
-### Workflow Steps
-
-```
-POST /tweet
-    ↓
-1. Receive Idea          → event: tweet.idea.received
-    ↓
-2. Generate Variations   → event: tweet.variations.generated   [cached]
-    ↓
-3. Select Best Tweet     → event: tweet.best.selected
-    ↓
-4. Post to X API        → event: tweet.posted.success
-    ↓
-5. Write Result File     → TWEET_RESULT.md
-```
-
-### Services (DDD Pattern)
-
-```
-src/
-├── services/
-│   ├── ai/
-│   │   └── generate-tweet.ts    # OpenAI integration
-│   ├── xapi/
-│   │   ├── post-tweet.ts        # X API v2 posting
-│   │   └── types.ts             # Type definitions
-│   └── file/
-│       └── write-result.ts      # Markdown file writer
-├── errors/
-│   └── tweet-errors.ts          # Custom error classes
-└── middlewares/                  # (Future: rate limiting, etc.)
-```
-
----
-
-## 🚀 Quick Start
-
-### 1. Install Dependencies
+## Quick Start
 
 ```bash
-cd Day-5
-npm install --legacy-peer-deps
-```
-
-> **Note**: The `--legacy-peer-deps` flag resolves the Zod version conflict between OpenAI (requires zod@^3) and Motia (uses zod@^4).
-
-### 2. Configure Environment
-
-Copy `.env.example` to `.env`:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env`:
-
-```env
-# Required for AI generation
-OPENAI_API_KEY=sk-your-openai-key-here
-
-# Required for real X posting (optional in mock mode)
-X_BEARER_TOKEN=your-x-bearer-token-here
-
-# Output file path
-OUTPUT_PATH=./TWEET_RESULT.md
-
-# Mock mode (true = don't post to real X)
-MOCK_X=true
-```
-
-### 3. Run the Workflow
-
-```bash
+# Start the development server
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
 ```
 
-Server starts at: `http://localhost:3005`
-
----
-
-## 📡 API Usage
-
-### POST /tweet
-
-**Request:**
+This starts the Motia runtime and the **Workbench** - a powerful UI for developing and debugging your workflows. By default, it's available at [`http://localhost:3000`](http://localhost:3000).
 
 ```bash
-curl -X POST http://localhost:3005/tweet \
-  -H "Content-Type: application/json" \
-  -d '{
-    "idea": "Just shipped a new feature that makes developers 10x more productive"
-  }'
+# Test your first endpoint
+curl http://localhost:3000/hello
 ```
 
-**Response:**
+## Step Types
 
-```json
-{
-  "success": true,
-  "message": "Tweet idea received successfully",
-  "idea": "Just shipped a new feature that makes developers 10x more productive"
-}
+Every Step has a `type` that defines how it triggers:
+
+| Type | When it runs | Use case |
+|------|--------------|----------|
+| **`api`** | HTTP request | REST APIs, webhooks |
+| **`event`** | Event emitted | Background jobs, workflows |
+| **`cron`** | Schedule | Cleanup, reports, reminders |
+
+## Development Commands
+
+```bash
+# Start Workbench and development server
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+
+# Generate TypeScript types from Step configs
+npm run generate-types
+# or
+yarn generate-types
+# or
+pnpm generate-types
+
+# Build project for deployment
+npm run build
+# or
+yarn build
+# or
+pnpm build
 ```
 
-### Expected Output
-
-After the workflow completes, check:
-
-1. **Console Logs**: Watch steps turn green in terminal
-2. **TWEET_RESULT.md**: View generated variations and results
-3. **Return Data**: Final step returns tweet URL
-
----
-
-## 🧪 Testing
-
-### Mock Mode (Default)
-
-Set in `.env`:
-
-```env
-MOCK_X=true
-```
-
-This will:
-- ✅ Generate real AI variations
-- ✅ Select best tweet
-- ✅ Write TWEET_RESULT.md
-- ❌ **NOT** post to real X API
-- ✅ Return mock tweet ID/URL
-
-**Perfect for local testing without Twitter credentials!**
-
-### Real Mode
-
-Set in `.env`:
-
-```env
-MOCK_X=false
-X_BEARER_TOKEN=your-real-bearer-token
-```
-
-This will post to your actual X (Twitter) account.
-
-### Full Test Flow
-
-1. Start the server:
-   ```bash
-   npm run dev
-   ```
-
-2. Send a test request:
-   ```bash
-   curl -X POST http://localhost:3005/tweet \
-     -H "Content-Type: application/json" \
-     -d '{"idea": "Testing my new AI tweet automation 🚀"}'
-   ```
-
-3. Watch the console for step progression:
-   ```
-   ✓ Receive Tweet Idea
-   ✓ Generate Tweet Variations
-   ✓ Select Best Tweet
-   ✓ Post Tweet to X
-   ✓ Write Tweet Result
-   ```
-
-4. Check `TWEET_RESULT.md` for full output
-
----
-
-## 📊 TWEET_RESULT.md Example
-
-```markdown
-# 🐦 Tweet Result
-
-## Original Idea
-```
-Testing my new AI tweet automation 🚀
-```
-
----
-
-## Generated Variations
-
-### Variation 1
-**Length:** 67 chars | **Has Hashtags:** Yes
+## Project Structure
 
 ```
-Just tested my AI tweet automation 🚀 Works like magic! #automation
+steps/              # Your Step definitions (or use src/)
+motia.config.ts     # Motia configuration
 ```
 
-### Variation 2
-...
+Steps are auto-discovered from your `steps/` or `src/` directories - no manual registration required.
 
----
+## Learn More
 
-## ✅ Selected Tweet (Best)
-**Length:** 58 chars | **Has Hashtags:** No
+- [Documentation](https://motia.dev/docs) - Complete guides and API reference
+- [Quick Start Guide](https://motia.dev/docs/getting-started/quick-start) - Detailed getting started tutorial
+- [Core Concepts](https://motia.dev/docs/concepts/overview) - Learn about Steps and Motia architecture
+- [Discord Community](https://discord.gg/motia) - Get help and connect with other developers
 
-```
-My AI tweet automation is live and working perfectly! 🚀
-```
-
----
-
-## 🚀 Post Result
-
-- **Tweet ID:** `mock-1701634800000`
-- **Tweet URL:** https://x.com/mock-user/status/mock-1701634800000
-- **Posted At:** 2024-12-03T16:30:00.000Z
-- **Mock Mode:** ✅ Yes (Testing)
-
----
-
-**Generated by Day-5 AI X Auto-Posting Workflow** 🤖
-```
-
----
-
-## 🎛️ Motia Workbench
-
-To visualize and monitor the workflow:
-
-1. Open Motia Workbench (if installed)
-2. Import this workflow
-3. Trigger `/tweet` endpoint
-4. Watch real-time step execution
-5. View event flow and data transformations
-
----
-
-## 🔧 Configuration Details
-
-### AI Tweet Generation
-
-- **Model**: GPT-4 Turbo
-- **Temperature**: 0.8 (creative)
-- **Max Tokens**: 500
-- **Constraints**:
-  - 280 character limit
-  - Human, conversational tone
-  - Strategic hashtag use (1-2 max)
-  - Minimal emojis
-  - Clean and simple
-
-### Best Tweet Selection Logic
-
-Prioritizes:
-1. **Shortest** length (conciseness)
-2. **Clearest** content (fewer special chars)
-3. **Under 280** characters
-4. **High readability**
-
-### Caching Strategy
-
-- **Key**: `tweet-variations:{idea}`
-- **TTL**: 1 hour (3600s)
-- **Purpose**: Avoid re-generating same variations
-
----
-
-## 📁 Project Structure
-
-```
-Day-5/
-├── src/
-│   ├── services/
-│   │   ├── ai/
-│   │   │   └── generate-tweet.ts      # OpenAI service
-│   │   ├── xapi/
-│   │   │   ├── post-tweet.ts          # X API service
-│   │   │   └── types.ts               # Type definitions
-│   │   └── file/
-│   │       └── write-result.ts        # File writer
-│   ├── errors/
-│   │   └── tweet-errors.ts            # Custom errors
-│   └── middlewares/                    # (Future extensions)
-├── steps/
-│   └── day-5/
-│       ├── 01-receive-idea.step.ts
-│       ├── 02-generate-variations.step.ts
-│       ├── 03-select-best.step.ts
-│       ├── 04-post-tweet.step.ts
-│       └── 05-write-result.step.ts
-├── motia.config.js                     # Motia configuration
-├── package.json
-├── tsconfig.json
-├── .env.example
-├── README.md
-└── TWEET_RESULT.md                     # Generated output
-```
-
----
-
-## 🔐 X API Setup
-
-To get your X Bearer Token:
-
-1. Go to [X Developer Portal](https://developer.twitter.com/)
-2. Create a new App
-3. Generate API v2 Bearer Token
-4. Copy token to `.env` → `X_BEARER_TOKEN`
-
-**Permissions needed**: Read and Write tweets
-
----
-
-## 🚨 Error Handling
-
-Custom error classes:
-
-- `AIGenerationError`: OpenAI API failures
-- `XAPIError`: X API failures
-- `TweetValidationError`: Tweet validation failures
-- `FileWriteError`: File system errors
-
-All errors are:
-- Logged to console
-- Included in Motia observability
-- Returned with proper HTTP status codes
-
----
-
-## 🎯 Differences from n8n
-
-| Feature | n8n | Motia (Day-5) |
-|---------|-----|---------------|
-| Configuration | Visual GUI | TypeScript Code |
-| Type Safety | Limited | Full Zod validation |
-| Caching | Manual | Built-in |
-| Error Handling | Basic | Custom error classes |
-| Testing | External tools | Mock mode built-in |
-| DDD Pattern | No | Yes |
-| Event-Driven | Yes | Yes |
-| Observability | Basic | Full plugin |
-
----
-
-## 🔮 Future Enhancements
-
-- [ ] Thread support (tweet multiple parts)
-- [ ] Image generation + attachment
-- [ ] Scheduling (post at specific time)
-- [ ] Analytics tracking
-- [ ] Multiple account support
-- [ ] Sentiment analysis before posting
-- [ ] Rate limiting middleware
-- [ ] Redis for caching in production
-
----
-
-## 📚 Related Days
-
-- **Day-1**: GitHub Release Notifier
-- **Day-2**: GitHub Issue Auto-Labeler
-- **Day-3**: Contributor Welcome Bot
-- **Day-4**: AI Issue Picker
-
----
-
-## 🤝 Contributing
-
-Follow the same DDD patterns as Day-1 through Day-4:
-
-1. Services contain **all external API logic**
-2. Steps only **orchestrate** and **emit events**
-3. Use **Zod** for validation
-4. Add **custom errors** for each layer
-5. Keep **payloads small**
-6. Add **caching** where appropriate
-
----
-
-## 📄 License
-
-MIT
-
----
-
-**Built with ❤️ using Motia Framework**
-
-*Challenge: #30Days30Automations | Day: 5/30*
