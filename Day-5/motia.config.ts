@@ -5,5 +5,5 @@ const logsPlugin = require('@motiadev/plugin-logs/plugin')
 const observabilityPlugin = require('@motiadev/plugin-observability/plugin')
 
 export default config({
-  plugins: [observabilityPlugin, statesPlugin, endpointPlugin, logsPlugin],
+    plugins: [observabilityPlugin, statesPlugin, endpointPlugin, logsPlugin],
 })
