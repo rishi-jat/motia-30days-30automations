@@ -28,7 +28,30 @@ export type TweetVariation = z.infer<typeof TweetVariationSchema>;
 export type TweetVariations = z.infer<typeof TweetVariationsSchema>;
 
 /**
+ * Generate mock tweet variations (fallback for quota/errors)
+ */
+function generateMockVariations(idea: string): TweetVariations {
+    const mockTemplates = [
+        `${idea} #tech #automation`,
+        `Just thinking about this: ${idea}`,
+        `${idea} 🚀`,
+    ];
+
+    const variations: TweetVariation[] = mockTemplates.map((text) => ({
+        text: text.substring(0, 280), // Ensure max 280 chars
+        length: text.substring(0, 280).length,
+        hasHashtags: text.includes('#'),
+    }));
+
+    return {
+        variations,
+        original: idea,
+    };
+}
+
+/**
  * Generate 3 tweet variations from an idea
+ * Falls back to mock data when OpenAI quota exceeded
  */
 export async function generateTweetVariations(idea: string): Promise<TweetVariations> {
     try {
@@ -41,7 +64,8 @@ export async function generateTweetVariations(idea: string): Promise<TweetVariat
         });
 
         if (!process.env.OPENAI_API_KEY) {
-            throw new AIGenerationError('OPENAI_API_KEY not configured');
+            console.log('[MOCK MODE] No API key, using mock variations');
+            return generateMockVariations(validated.idea);
         }
 
         // Generate variations using GPT-4
@@ -62,7 +86,7 @@ Return ONLY a JSON array with 3 tweet strings, no other text:
 ["tweet 1", "tweet 2", "tweet 3"]`;
 
         const completion = await openai.chat.completions.create({
-            model: 'gpt-4-turbo-preview',
+            model: 'gpt-4o-mini',
             messages: [
                 {
                     role: 'system',
@@ -115,6 +139,16 @@ Return ONLY a JSON array with 3 tweet strings, no other text:
         // Validate output
         return TweetVariationsSchema.parse(result);
     } catch (error) {
+        // Check for quota exceeded error
+        if (error instanceof Error && (
+            error.message.includes('429') || 
+            error.message.includes('quota') ||
+            error.message.includes('does not exist')
+        )) {
+            console.log('[MOCK MODE] OpenAI quota exceeded or model unavailable, using mock variations');
+            return generateMockVariations(idea);
+        }
+
         if (error instanceof AIGenerationError || error instanceof TweetValidationError) {
             throw error;
         }
