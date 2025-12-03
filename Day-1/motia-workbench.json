@@ -3,8 +3,8 @@
     "id": "basic-tutorial",
     "config": {
       "steps/petstore/state-audit-cron.step.ts": {
-        "x": -175,
-        "y": 219,
+        "x": -35,
+        "y": 376,
         "sourceHandlePosition": "right"
       },
       "steps/petstore/process-food-order.step.ts": {
@@ -13,8 +13,8 @@
         "sourceHandlePosition": "bottom"
       },
       "steps/petstore/notification.step.ts": {
-        "x": 331,
-        "y": 261,
+        "x": 298,
+        "y": 379,
         "sourceHandlePosition": "bottom"
       },
       "steps/petstore/api.step.ts": {
@@ -28,12 +28,12 @@
     "id": "github-release-notifier",
     "config": {
       "steps/github-release-notifier/github-webhook.step.ts": {
-        "x": 8,
-        "y": -7
+        "x": 76,
+        "y": -5
       },
       "steps/github-release-notifier/discord-notification.step.ts": {
-        "x": 573,
-        "y": 27
+        "x": 578,
+        "y": 28
       }
     }
   }
