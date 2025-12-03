@@ -15,6 +15,8 @@ This repo is my daily log of what I build, what breaks, and what I learn along t
 | **1** | [GitHub Release → Discord](./Day-1) | Validating incoming webhooks early prevents bad payloads from taking down the workflow. | Shipped |
 | **2** | [GitHub Issues → Slack](./Day-2) | Defensive code matters — GitHub events can be inconsistent, and you can’t trust fields to always exist. | Shipped |
 | **3** | [AI Auto-Documentation Generator](./Day-3) | Helping new contributors understand large codebases with automated repo analysis. | Shipped |
+| **4** | [AI Issue Explainer](./Day-4) | Turning GitHub issues into step-by-step fix guides using repo scanning + LLMs. | Shipped |
+| **5** | [AI X Auto‑Poster](./Day-5) | End‑to‑end tweet automation: idea → variations → best pick → X post → result file. | Shipped |
 | ... | | | |
 | **30** | Finale | — | Upcoming |
 
@@ -47,6 +49,25 @@ The workflow scans the repo, extracts structure and key files, and generates a b
 It includes an LLM-powered generator with a graceful fallback system, plus caching so later runs are instant.
 
 **Tech:** Event pipeline, GitHub API, LLM integration, automatic fallback, repo modeling.
+
+---
+
+## Day 4: AI Issue Explainer
+
+Day 4 focuses on helping new open‑source contributors understand issues without getting lost in large codebases.  
+The workflow fetches open issues, lets you pick one, scans the repository for relevant context, and generates a full fix guide with links, affected files, and step‑by‑step instructions.
+
+**Tech:** GitHub issues API, repo scanning, LLM analysis, structured JSON pipelines.
+
+---
+
+## Day 5: AI X Auto‑Poster
+
+For Day 5, I built an automation that takes a raw idea, generates multiple tweet variations, selects the best one, posts it to X automatically, and writes a detailed `TWEET_RESULT.md` file.  
+Inspired by n8n workflows, but fully re‑implemented in Motia with event‑driven steps.
+
+**Tech:** AI text generation, X API v2, safe mode (mock posting), content selection logic.
+
 ---
 
 ## Stack
