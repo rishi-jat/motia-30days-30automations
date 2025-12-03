@@ -31,17 +31,21 @@ export type TweetVariations = z.infer<typeof TweetVariationsSchema>;
  * Generate mock tweet variations (fallback for quota/errors)
  */
 function generateMockVariations(idea: string): TweetVariations {
-    const mockTemplates = [
-        `${idea} #tech #automation`,
-        `Just thinking about this: ${idea}`,
-        `${idea} 🚀`,
+    // Create diverse, natural variations
+    const templates = [
+        `${idea} 🚀\n\n#BuildInPublic #Tech`,
+        `Just shipped: ${idea}\n\nWhat do you think?`,
+        `${idea}\n\nExcited to share this! 💡`,
     ];
-
-    const variations: TweetVariation[] = mockTemplates.map((text) => ({
-        text: text.substring(0, 280), // Ensure max 280 chars
-        length: text.substring(0, 280).length,
-        hasHashtags: text.includes('#'),
-    }));
+    
+    const variations: TweetVariation[] = templates.map((text) => {
+        const trimmed = text.substring(0, 280);
+        return {
+            text: trimmed,
+            length: trimmed.length,
+            hasHashtags: trimmed.includes('#'),
+        };
+    });
 
     return {
         variations,
@@ -86,7 +90,7 @@ Return ONLY a JSON array with 3 tweet strings, no other text:
 ["tweet 1", "tweet 2", "tweet 3"]`;
 
         const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
+            model: 'gpt-3.5-turbo',
             messages: [
                 {
                     role: 'system',

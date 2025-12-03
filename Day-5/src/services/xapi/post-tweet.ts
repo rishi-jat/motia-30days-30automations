@@ -1,9 +1,11 @@
 /**
  * X (Twitter) API Service
- * Posts tweets using X API v2 with mock mode support
+ * Posts tweets using X API v2 with OAuth 1.0a authentication
  */
 
 import { z } from 'zod';
+import OAuth from 'oauth-1.0a';
+import crypto from 'crypto';
 import { XAPIError } from '../../errors/tweet-errors';
 import type { XAPITweetRequest, XAPITweetResponse, TweetResult } from './types';
 
@@ -11,7 +13,7 @@ import type { XAPITweetRequest, XAPITweetResponse, TweetResult } from './types';
 const TweetTextSchema = z.string().min(1).max(280);
 
 /**
- * Post a tweet to X (Twitter) using API v2
+ * Post a tweet to X (Twitter) using API v2 with OAuth 1.0a
  * Supports mock mode for testing without posting
  */
 export async function postTweet(text: string): Promise<TweetResult> {
@@ -33,20 +35,48 @@ export async function postTweet(text: string): Promise<TweetResult> {
             };
         }
 
-        // Real X API posting
-        const bearerToken = process.env.X_BEARER_TOKEN;
-        if (!bearerToken) {
-            throw new XAPIError('X_BEARER_TOKEN not configured');
+        // Real X API posting with OAuth 1.0a
+        const apiKey = process.env.X_API_KEY;
+        const apiSecret = process.env.X_API_SECRET;
+        const accessToken = process.env.X_ACCESS_TOKEN;
+        const accessTokenSecret = process.env.X_ACCESS_TOKEN_SECRET;
+
+        if (!apiKey || !apiSecret || !accessToken || !accessTokenSecret) {
+            throw new XAPIError('X OAuth credentials not configured. Need X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET');
         }
+
+        // Initialize OAuth 1.0a
+        const oauth = new OAuth({
+            consumer: { key: apiKey, secret: apiSecret },
+            signature_method: 'HMAC-SHA1',
+            hash_function(base_string, key) {
+                return crypto
+                    .createHmac('sha1', key)
+                    .update(base_string)
+                    .digest('base64');
+            },
+        });
+
+        const requestData = {
+            url: 'https://api.twitter.com/2/tweets',
+            method: 'POST',
+        };
 
         const requestBody: XAPITweetRequest = {
             text: validatedText,
         };
 
+        const authHeader = oauth.toHeader(
+            oauth.authorize(requestData, {
+                key: accessToken,
+                secret: accessTokenSecret,
+            })
+        );
+
         const response = await fetch('https://api.twitter.com/2/tweets', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${bearerToken}`,
+                ...authHeader,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestBody),
