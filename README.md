@@ -17,6 +17,7 @@ This repo is my daily log of what I build, what breaks, and what I learn along t
 | **3** | [AI Auto-Documentation Generator](./Day-3) | Helping new contributors understand large codebases with automated repo analysis. | Shipped |
 | **4** | [AI Issue Explainer](./Day-4) | Turning GitHub issues into step-by-step fix guides using repo scanning + LLMs. | Shipped |
 | **5** | [AI X Auto‑Poster](./Day-5) | End‑to‑end tweet automation: idea → variations → best pick → X post → result file. | Shipped |
+| **6** | [AI Log Analyzer](./Day-6) | Turning messy error logs into structured incident reports with LLM analysis. | Shipped |
 | ... | | | |
 | **30** | Finale | — | Upcoming |
 
@@ -67,6 +68,17 @@ For Day 5, I built an automation that takes a raw idea, generates multiple tweet
 Inspired by n8n workflows, but fully re‑implemented in Motia with event‑driven steps.
 
 **Tech:** AI text generation, X API v2, safe mode (mock posting), content selection logic.
+
+---
+
+## Day 6: AI Log Analyzer
+
+Day 6 tackles a common pain point: digging through error logs to find the root cause.  
+The workflow receives raw logs via API, sanitizes them, extracts errors and stack traces, and uses LLM to generate a full incident report with fix recommendations.
+
+Includes a fallback analyzer when LLM is unavailable — no excuses for missing reports.
+
+**Tech:** Log parsing, regex extraction, LLM analysis, markdown report generation.
 
 ---
 
