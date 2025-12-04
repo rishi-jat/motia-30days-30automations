@@ -20,6 +20,7 @@
     "@motiadev/plugin-observability": "^0.14.0-beta.164",
     "@motiadev/plugin-states": "^0.14.0-beta.164",
     "motia": "^0.14.0-beta.164",
+    "openai": "^4.47.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {
