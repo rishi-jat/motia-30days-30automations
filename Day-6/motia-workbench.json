@@ -12,5 +12,34 @@
         "sourceHandlePosition": "right"
       }
     }
+  },
+  {
+    "id": "ai-log-analyzer",
+    "config": {
+      "steps/log-analyzer/06-write-report.step.ts": {
+        "x": 1439,
+        "y": 38
+      },
+      "steps/log-analyzer/05-fallback-basic-report.step.ts": {
+        "x": 853,
+        "y": 29
+      },
+      "steps/log-analyzer/04-analyze-with-llm.step.ts": {
+        "x": 1110,
+        "y": -230
+      },
+      "steps/log-analyzer/03-parse-logs.step.ts": {
+        "x": 707,
+        "y": -240
+      },
+      "steps/log-analyzer/02-sanitize-logs.step.ts": {
+        "x": 488,
+        "y": -43
+      },
+      "steps/log-analyzer/01-upload-logs-api.step.ts": {
+        "x": 66,
+        "y": -85
+      }
+    }
   }
 ]
