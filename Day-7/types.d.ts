@@ -12,8 +12,11 @@ declare module 'motia' {
   }
 
   interface Handlers {
-    'ProcessGreeting': EventHandler<{ timestamp: string; appName: string; greetingPrefix: string; requestId: string }, never>
-    'HelloAPI': ApiRouteHandler<Record<string, unknown>, ApiResponse<200, { message: string; status: string; appName: string }>, { topic: 'process-greeting'; data: { timestamp: string; appName: string; greetingPrefix: string; requestId: string } }>
+    'GetReleaseNotes': ApiRouteHandler<Record<string, unknown>, ApiResponse<200, { repo: string; version: string; markdown: string; createdAt: string }> | ApiResponse<404, { error: string }>, never>
+    'GenerateReleaseNotesOutput': EventHandler<{ repo: string; version: string; categories: { features: Array<string>; fixes: Array<string>; breaking: Array<string>; other: Array<string> }; lastTag: string | unknown }, never>
+    'AnalyzeCommitsWithAI': EventHandler<{ repo: string; commits: Array<{ sha: string; message: string; author: string; date: string; url: string }>; version: string; lastTag: string | unknown }, { topic: 'release.generate-notes'; data: { repo: string; version: string; categories: { features: Array<string>; fixes: Array<string>; breaking: Array<string>; other: Array<string> }; lastTag: string | unknown } }>
+    'FetchGitHubCommits': EventHandler<{ owner: string; repo: string; version: string }, { topic: 'release.analyze-commits'; data: { repo: string; commits: Array<{ sha: string; message: string; author: string; date: string; url: string }>; version: string; lastTag: string | unknown } }>
+    'GenerateReleaseNotes': ApiRouteHandler<{ repo: string; version?: string }, ApiResponse<202, { message: string; traceId: string; repo: string }> | ApiResponse<400, { error: string }>, { topic: 'release.fetch-commits'; data: { owner: string; repo: string; version: string } }>
   }
     
 }
