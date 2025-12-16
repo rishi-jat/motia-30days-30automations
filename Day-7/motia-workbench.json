@@ -12,5 +12,30 @@
         "sourceHandlePosition": "right"
       }
     }
+  },
+  {
+    "id": "release-notes-generator",
+    "config": {
+      "src/steps/release-notes/05-get-notes-api.step.ts": {
+        "x": 1083,
+        "y": -25
+      },
+      "src/steps/release-notes/04-generate-output.step.ts": {
+        "x": 1091,
+        "y": 235
+      },
+      "src/steps/release-notes/03-analyze-commits.step.ts": {
+        "x": 689,
+        "y": 139
+      },
+      "src/steps/release-notes/02-fetch-commits.step.ts": {
+        "x": 303,
+        "y": 142
+      },
+      "src/steps/release-notes/01-generate-api.step.ts": {
+        "x": -142,
+        "y": 107
+      }
+    }
   }
 ]
