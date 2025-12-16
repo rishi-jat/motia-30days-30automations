@@ -17,12 +17,12 @@
     "id": "ai-log-analyzer",
     "config": {
       "steps/log-analyzer/06-write-report.step.ts": {
-        "x": 1439,
-        "y": 38
+        "x": 1510,
+        "y": 33
       },
       "steps/log-analyzer/05-fallback-basic-report.step.ts": {
-        "x": 853,
-        "y": 29
+        "x": 920,
+        "y": 125
       },
       "steps/log-analyzer/04-analyze-with-llm.step.ts": {
         "x": 1110,
