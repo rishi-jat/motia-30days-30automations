@@ -209,4 +209,4 @@ When working on Motia projects, follow this pattern:
 
 ---
 
-**Remember**: This AGENTS.md is a quick reference. The `.cursor/rules/` directory contains the comprehensive, authoritative guides with complete examples and type definitions. Always consult those guides when implementing Motia patterns.
+**Remember**: This AGENTS.md is a quick reference. The `.cursor/rules/` directory containsthe comprehensive, authoritative guides with complete examples and type definitions. Always consult those guides when implementing Motia patterns.
