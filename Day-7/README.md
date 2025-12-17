@@ -44,13 +44,6 @@ yarn dev
 # or
 pnpm dev
 
-# Start production server (without hot reload)
-npm run start
-# or
-yarn start
-# or
-pnpm start
-
 # Generate TypeScript types from Step configs
 npm run generate-types
 # or
@@ -81,3 +74,4 @@ Steps are auto-discovered from your `steps/` or `src/` directories - no manual r
 - [Quick Start Guide](https://motia.dev/docs/getting-started/quick-start) - Detailed getting started tutorial
 - [Core Concepts](https://motia.dev/docs/concepts/overview) - Learn about Steps and Motia architecture
 - [Discord Community](https://discord.gg/motia) - Get help and connect with other developers
+

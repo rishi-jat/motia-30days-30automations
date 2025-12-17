@@ -2,11 +2,11 @@
   {
     "id": "hello-world-flow",
     "config": {
-      "src/hello/process-greeting.step.ts": {
+      "steps/hello/process-greeting.step.ts": {
         "x": 409,
         "y": 44
       },
-      "src/hello/hello-api.step.ts": {
+      "steps/hello/hello-api.step.ts": {
         "x": 0,
         "y": 0,
         "sourceHandlePosition": "right"
@@ -16,25 +16,25 @@
   {
     "id": "release-notes-generator",
     "config": {
-      "src/steps/release-notes/05-get-notes-api.step.ts": {
-        "x": 1128,
-        "y": -31
+      "steps/release-notes/05-get-notes-api.step.ts": {
+        "x": 1053,
+        "y": 0
       },
-      "src/steps/release-notes/04-generate-output.step.ts": {
-        "x": 1131,
-        "y": 267
+      "steps/release-notes/04-generate-output.step.ts": {
+        "x": 1053,
+        "y": 239
       },
-      "src/steps/release-notes/03-analyze-commits.step.ts": {
-        "x": 682,
-        "y": 142
+      "steps/release-notes/03-analyze-commits.step.ts": {
+        "x": 669,
+        "y": 141
       },
-      "src/steps/release-notes/02-fetch-commits.step.ts": {
-        "x": 267,
-        "y": 142
+      "steps/release-notes/02-fetch-commits.step.ts": {
+        "x": 300,
+        "y": 141
       },
-      "src/steps/release-notes/01-generate-api.step.ts": {
-        "x": -193,
-        "y": 108
+      "steps/release-notes/01-generate-api.step.ts": {
+        "x": -100,
+        "y": 102
       }
     }
   }

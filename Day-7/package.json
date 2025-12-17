@@ -1,10 +1,9 @@
 {
-  "name": "day-7",
+  "name": "Day-7",
   "description": "",
   "scripts": {
     "postinstall": "motia install",
     "dev": "motia dev",
-    "start": "motia start",
     "generate-types": "motia generate-types",
     "build": "motia build",
     "clean": "rm -rf dist node_modules python_modules .motia .mermaid"
@@ -21,7 +20,8 @@
     "@motiadev/plugin-observability": "^0.14.0-beta.164",
     "@motiadev/plugin-states": "^0.14.0-beta.164",
     "motia": "^0.14.0-beta.164",
-    "zod": "^3.23.8"
+    "openai": "^6.14.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/react": "^19.1.1",

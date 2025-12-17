@@ -11,64 +11,56 @@ You are an expert Motia developer with comprehensive knowledge of all Motia patt
 
 Before writing ANY Motia code, you MUST read the relevant cursor rules from `.cursor/rules/`:
 
-### Configuration Guide (in `.cursor/rules/motia/`)
-
-1. **`motia-config.mdc`** - Project configuration
-   - Package.json requirements (`"type": "module"`)
-   - Plugin naming conventions and setup
-   - Adapter configuration, Redis setup
-   - Stream authentication patterns
-
 ### Step Type Guides (in `.cursor/rules/motia/`)
 
-2. **`api-steps.mdc`** - HTTP endpoints
+1. **`api-steps.mdc`** - HTTP endpoints
    - Creating API Steps with TypeScript, JavaScript, or Python
    - Request/response schemas, validation, middleware
    - When to emit events vs process directly
 
-3. **`event-steps.mdc`** - Background tasks
+2. **`event-steps.mdc`** - Background tasks
    - Creating Event Steps with TypeScript, JavaScript, or Python
    - Topic subscription, event chaining, retry mechanisms
    - Asynchronous workflow patterns
 
-4. **`cron-steps.mdc`** - Scheduled tasks
+3. **`cron-steps.mdc`** - Scheduled tasks
    - Creating Cron Steps with TypeScript, JavaScript, or Python
    - Cron expression syntax, idempotent patterns
    - When to emit events from scheduled jobs
 
-5. **`state-management.mdc`** - State/cache management
+4. **`state-management.mdc`** - State/cache management
    - Using state across steps with TypeScript, JavaScript, or Python
    - When to use state vs database
    - TTL configuration, caching strategies
 
-6. **`middlewares.mdc`** - Request/response middleware
+5. **`middlewares.mdc`** - Request/response middleware
    - Creating middleware with TypeScript, JavaScript, or Python
    - Authentication, validation, error handling
    - Middleware composition patterns
 
-7. **`realtime-streaming.mdc`** - Real-time data
+6. **`realtime-streaming.mdc`** - Real-time data
    - Server-Sent Events (SSE) patterns
    - WebSocket support
    - Stream configuration and usage
 
-8. **`virtual-steps.mdc`** - Visual flow connections
+7. **`virtual-steps.mdc`** - Visual flow connections
    - Creating NOOP steps for Workbench
    - Virtual emits/subscribes for documentation
    - Workflow visualization
 
-9. **`ui-steps.mdc`** - Custom Workbench components
+8. **`ui-steps.mdc`** - Custom Workbench components
    - Creating custom visual components (TypeScript/React)
    - EventNode, ApiNode, CronNode components
    - Styling with Tailwind
 
 ### Architecture Guides (in `.cursor/architecture/`)
 
-10. **`architecture.mdc`** - Project structure
+9. **`architecture.mdc`** - Project structure
    - File organization, naming conventions
    - Domain-Driven Design patterns
    - Services, repositories, utilities structure
 
-11. **`error-handling.mdc`** - Error handling
+10. **`error-handling.mdc`** - Error handling
     - Custom error classes
     - Middleware error handling
     - ZodError/Pydantic validation errors
@@ -86,7 +78,6 @@ Before writing ANY Motia code, you MUST read the relevant cursor rules from `.cu
 ## Key Principles
 
 - **All guides have TypeScript, JavaScript, and Python examples**
-- **Steps can live in `/src` or `/steps`** - Motia discovers both (use `/src` for modern structure)
 - **Always export `config` and `handler`**
 - **List all emits in config before using them**
 - **Follow naming conventions**: `*.step.ts` (TS), `*.step.js` (JS), `*_step.py` (Python)
@@ -101,4 +92,4 @@ If you're unsure about any Motia pattern:
 
 ---
 
-Remember: The 11 cursor rules in `.cursor/rules/` are your source of truth. Always read them first.
+Remember: The 10 cursor rules in `.cursor/rules/` are your source of truth. Always read them first.
