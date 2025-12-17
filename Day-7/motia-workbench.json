@@ -17,24 +17,24 @@
     "id": "release-notes-generator",
     "config": {
       "src/steps/release-notes/05-get-notes-api.step.ts": {
-        "x": 1083,
-        "y": -25
+        "x": 1128,
+        "y": -31
       },
       "src/steps/release-notes/04-generate-output.step.ts": {
-        "x": 1091,
-        "y": 235
+        "x": 1131,
+        "y": 267
       },
       "src/steps/release-notes/03-analyze-commits.step.ts": {
-        "x": 689,
-        "y": 139
+        "x": 682,
+        "y": 142
       },
       "src/steps/release-notes/02-fetch-commits.step.ts": {
-        "x": 303,
+        "x": 267,
         "y": 142
       },
       "src/steps/release-notes/01-generate-api.step.ts": {
-        "x": -142,
-        "y": 107
+        "x": -193,
+        "y": 108
       }
     }
   }
