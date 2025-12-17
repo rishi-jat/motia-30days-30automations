@@ -87,7 +87,18 @@ export const handler: Handlers['AnalyzeCommitsWithAI'] = async (input, { emit, l
     const { repo, commits, version, lastTag } = input
     logger.info('Analyzing commits with AI', { repo, commitCount: commits.length })
 
-    const categories = await categorizeCommits(commits)
+    let categories
+    try {
+        categories = await categorizeCommits(commits)
+    } catch (error) {
+        logger.error('LLM categorization failed, using fallback', { error })
+        categories = {
+            features: [],
+            fixes: [],
+            breaking: [],
+            other: commits.map((c) => c.message),
+        }
+    }
     logger.info('Commits categorized', {
         features: categories.features.length,
         fixes: categories.fixes.length,
