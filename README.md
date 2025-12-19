@@ -1,0 +1,108 @@
+# 30 Days of Motia Automation
+
+I’m Rishi, and this repository is my personal challenge: build 30 practical, production-ready backend automations in 30 days.
+
+The goal is simple — move beyond no‑code tools, understand event‑driven systems properly, and build things that actually solve problems. I’m using Motia because it lets me focus on logic while the platform handles the infrastructure pieces.
+
+This repo is my daily log of what I build, what breaks, and what I learn along the way.
+
+---
+
+## Progress
+
+| Day | Project | Key Insight | Status |
+|-----|---------|-------------|--------|
+| **1** | [GitHub Release → Discord](./Day-1) | Validating incoming webhooks early prevents bad payloads from taking down the workflow. | Shipped |
+| **2** | [GitHub Issues → Slack](./Day-2) | Defensive code matters — GitHub events can be inconsistent, and you can’t trust fields to always exist. | Shipped |
+| **3** | [AI Auto-Documentation Generator](./Day-3) | Helping new contributors understand large codebases with automated repo analysis. | Shipped |
+| **4** | [AI Issue Explainer](./Day-4) | Turning GitHub issues into step-by-step fix guides using repo scanning + LLMs. | Shipped |
+| **5** | [AI X Auto‑Poster](./Day-5) | End‑to‑end tweet automation: idea → variations → best pick → X post → result file. | Shipped |
+| **6** | [AI Log Analyzer](./Day-6) | Turning messy error logs into structured incident reports with LLM analysis. | Shipped |
+| ... | | | |
+| **30** | Finale | — | Upcoming |
+
+---
+
+## Day 1: GitHub Release Notifier
+
+I often miss important library releases, and email notifications aren’t reliable.  
+To fix that, I built a workflow that listens for GitHub release events and posts a formatted update to a Discord channel.
+
+**Tech:** Webhooks, Zod validation, Discord embeds.
+
+---
+
+## Day 2: GitHub Issue Labeler
+
+For Day 2, I focused on making things production‑safe.  
+GitHub sends a wide range of issue-related events, and some of them have missing or unexpected fields. The workflow now handles multiple event types gracefully and keeps state without crashing on edge cases.
+
+**Tech:** Multi‑event handling, state management, error‑tolerant execution.
+
+---
+
+## Day 3: AI Auto‑Documentation Generator
+
+For Day 3, I built an AI-powered workflow that analyzes any repository using Motia’s event-driven steps and automatically generates a complete `CONTRIBUTOR_GUIDE.md`.  
+The goal is to help new open-source contributors understand large codebases without feeling lost.
+
+The workflow scans the repo, extracts structure and key files, and generates a beginner-friendly documentation output.  
+It includes an LLM-powered generator with a graceful fallback system, plus caching so later runs are instant.
+
+**Tech:** Event pipeline, GitHub API, LLM integration, automatic fallback, repo modeling.
+
+---
+
+## Day 4: AI Issue Explainer
+
+Day 4 focuses on helping new open‑source contributors understand issues without getting lost in large codebases.  
+The workflow fetches open issues, lets you pick one, scans the repository for relevant context, and generates a full fix guide with links, affected files, and step‑by‑step instructions.
+
+**Tech:** GitHub issues API, repo scanning, LLM analysis, structured JSON pipelines.
+
+---
+
+## Day 5: AI X Auto‑Poster
+
+For Day 5, I built an automation that takes a raw idea, generates multiple tweet variations, selects the best one, posts it to X automatically, and writes a detailed `TWEET_RESULT.md` file.  
+Inspired by n8n workflows, but fully re‑implemented in Motia with event‑driven steps.
+
+**Tech:** AI text generation, X API v2, safe mode (mock posting), content selection logic.
+
+---
+
+## Day 6: AI Log Analyzer
+
+Day 6 tackles a common pain point: digging through error logs to find the root cause.  
+The workflow receives raw logs via API, sanitizes them, extracts errors and stack traces, and uses LLM to generate a full incident report with fix recommendations.
+
+Includes a fallback analyzer when LLM is unavailable — no excuses for missing reports.
+
+**Tech:** Log parsing, regex extraction, LLM analysis, markdown report generation.
+
+---
+
+## Stack
+
+All automations in this challenge are built with:
+
+- Motia  
+- TypeScript  
+- Zod  
+- Node.js  
+
+---
+
+## Connect
+
+I’m sharing the daily progress on:
+
+- Twitter/X: https://twitter.com/rishixtwt  
+- GitHub: https://github.com/rishi-jat  
+- LinkedIn: https://linkedin.com/in/rishi-jat-496245320  
+
+If you have an idea for an upcoming day, feel free to suggest it.
+
+---
+
+*Made with ❤️ by Rishi.*
