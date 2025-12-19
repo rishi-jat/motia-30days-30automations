@@ -17,5 +17,22 @@
         "sourceHandlePosition": "right"
       }
     }
+  },
+  {
+    "id": "cloud-janitor",
+    "config": {
+      "src/events/auditor.step.ts": {
+        "x": 322,
+        "y": 34
+      },
+      "src/cron/scanner.step.ts": {
+        "x": 0,
+        "y": 0
+      },
+      "src/api/reaper.step.ts": {
+        "x": 137,
+        "y": 166
+      }
+    }
   }
 ]

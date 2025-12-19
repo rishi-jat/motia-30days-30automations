@@ -7,7 +7,7 @@ export const config: CronConfig = {
     type: 'cron',
     // Runs every 10 seconds for demo purposes
     cron: '*/10 * * * * *',
-    emits: ['audit.resource'],
+    emits: ['audit-resource'],
     flows: ['cloud-janitor']
 }
 
@@ -19,7 +19,7 @@ export const handler: Handlers['InfrastructureScan'] = async ({ emit, logger }) 
 
     for (const resource of resources) {
         await emit({
-            topic: 'audit.resource',
+            topic: 'audit-resource',
             data: resource
         })
     }

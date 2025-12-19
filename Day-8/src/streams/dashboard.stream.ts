@@ -16,6 +16,6 @@ export type DashboardItem = z.infer<typeof DashboardDataSchema>
 
 export const config: StreamConfig = {
     name: 'cloudJanitorDashboard',
-    schema: DashboardDataSchema,
+    schema: z.toJSONSchema(DashboardDataSchema),
     baseConfig: { storageType: 'default' },
 }
