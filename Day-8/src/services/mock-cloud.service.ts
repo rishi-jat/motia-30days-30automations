@@ -60,6 +60,10 @@ export class MockCloudService {
         return MOCK_RESOURCES.filter(r => r.status === 'running')
     }
 
+    async getResource(resourceId: string): Promise<CloudResource | null> {
+        return MOCK_RESOURCES.find(r => r.id === resourceId) ?? null
+    }
+
     async terminateResource(resourceId: string): Promise<boolean> {
         const resource = MOCK_RESOURCES.find(r => r.id === resourceId)
         if (resource) {

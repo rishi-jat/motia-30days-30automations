@@ -1,0 +1,26 @@
+
+> day-4-issue-explainer@1.0.0 dev
+> motia dev
+
+Failed to load motia.config.ts: TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for /Users/rishijat/motia-automation/Day-4/motia.config.ts
+    at new NodeError (node:internal/errors:405:5)
+    at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:136:11)
+    at defaultGetFormat (node:internal/modules/esm/get_format:182:36)
+    at defaultLoad (node:internal/modules/esm/load:101:20)
+    at ModuleLoader.load (node:internal/modules/esm/loader:417:13)
+    at ModuleLoader.moduleProvider (node:internal/modules/esm/loader:288:22)
+    at new ModuleJob (node:internal/modules/esm/module_job:63:26)
+    at #createModuleJob (node:internal/modules/esm/loader:312:17)
+    at ModuleLoader.getJobFromResolveResult (node:internal/modules/esm/loader:265:34)
+    at ModuleLoader.getModuleJob (node:internal/modules/esm/loader:251:17) {
+  code: 'ERR_UNKNOWN_FILE_EXTENSION'
+}
+[Redis Memory Server] Started on 127.0.0.1:58154
+[32m➜ [REGISTERED][39m [1m[34mFlow[39m[22m [1m[36missue-explain[39m[22m registered
+[32m➜ [REGISTERED][39m [1m[35mStep[39m[22m [90m(Event)[39m [1m[36msteps/issue-explain/write-fix-guide.step.ts[39m[22m registered
+[32m➜ [REGISTERED][39m [1m[35mStep[39m[22m [90m(Event)[39m [1m[36msteps/issue-explain/scan-repo.step.ts[39m[22m registered
+[32m➜ [REGISTERED][39m [1m[35mStep[39m[22m [90m(API)[39m [1m[36msteps/issue-explain/pick-issue-api.step.ts[39m[22m registered
+[32m➜ [REGISTERED][39m [1m[35mStep[39m[22m [90m(Event)[39m [1m[36msteps/issue-explain/generate-fix-guide.step.ts[39m[22m registered
+[32m➜ [REGISTERED][39m [1m[35mStep[39m[22m [90m(API)[39m [1m[36msteps/issue-explain/fetch-issues.step.ts[39m[22m registered
+[32m➜ [REGISTERED][39m [1m[35mStep[39m[22m [90m(Event)[39m [1m[36msteps/issue-explain/fetch-issue-details.step.ts[39m[22m registered
+[32m➜ [REGISTERED][39m [1m[35mStep[39m[22m [90m(Event)[39m [1m[36msteps/issue-explain/analyze-issue.step.ts[39m[22m registered

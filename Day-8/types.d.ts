@@ -14,9 +14,10 @@ declare module 'motia' {
   interface Handlers {
     'LogGreeting': EventHandler<{ requestId: string; greeting: string; processedBy: string }, never>
     'HelloAPI': ApiRouteHandler<Record<string, unknown>, ApiResponse<200, { message: string; status: string; appName: string }>, { topic: 'process-greeting'; data: { timestamp: string; appName: string; greetingPrefix: string; requestId: string } }>
-    'ResourceAuditor': EventHandler<{ id: string; name: string; type: 'ec2' | 'rds' | 's3' | 'lambda'; owner: string; created_at: string; cpu_usage_24h: number; network_io_24h: number; cost_per_hour: number; status: 'running' | 'stopped' | 'terminated'; tags?: Record<string, string> }, never>
+    'DashboardUpdater': EventHandler<{ id: string; name: string; type: string; cost_per_hour: number; status: 'pending_review' | 'zombie_detected' | 'terminated'; reason: string; detected_at: string }, never>
+    'ResourceAuditor': EventHandler<{ id: string; name: string; type: 'ec2' | 'rds' | 's3' | 'lambda'; owner: string; created_at: string; cpu_usage_24h: number; network_io_24h: number; cost_per_hour: number; status: 'running' | 'stopped' | 'terminated'; tags?: Record<string, string> }, { topic: 'dashboard-update'; data: { id: string; name: string; type: string; cost_per_hour: number; status: 'pending_review' | 'zombie_detected' | 'terminated'; reason: string; detected_at: string } }>
     'InfrastructureScan': CronHandler<{ topic: 'audit-resource'; data: { id: string; name: string; type: 'ec2' | 'rds' | 's3' | 'lambda'; owner: string; created_at: string; cpu_usage_24h: number; network_io_24h: number; cost_per_hour: number; status: 'running' | 'stopped' | 'terminated'; tags?: Record<string, string> } }>
-    'Reaper': ApiRouteHandler<{ resourceId: string }, ApiResponse<200, { success: boolean; message: string }> | ApiResponse<404, { error: string }>, never>
+    'Reaper': ApiRouteHandler<{ resourceId: string }, ApiResponse<200, { success: boolean; message: string }> | ApiResponse<404, { error: string }>, { topic: 'dashboard-update'; data: { id: string; name: string; type: string; cost_per_hour: number; status: 'pending_review' | 'zombie_detected' | 'terminated'; reason: string; detected_at: string } }>
     'ProcessGreeting': EventHandler<{ timestamp: string; appName: string; greetingPrefix: string; requestId: string }, { topic: 'greeting-processed'; data: { requestId: string; greeting: string; processedBy: string } }>
   }
     

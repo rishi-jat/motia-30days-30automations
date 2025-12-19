@@ -1,9 +1,0 @@
-node_modules/
-.env
-dist/
-.motia/
-*.log
-.DS_Store
-dump.rdb
-appendonlydir/
-redis-binaries/

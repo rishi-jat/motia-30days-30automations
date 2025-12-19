@@ -3,8 +3,8 @@
     "id": "hello-world-flow",
     "config": {
       "src/hello/log-greeting.step.js": {
-        "x": 409,
-        "y": 44
+        "x": 580,
+        "y": 29
       },
       "src/hello/hello-api.step.ts": {
         "x": -409,
@@ -12,8 +12,8 @@
         "sourceHandlePosition": "right"
       },
       "src/hello/process_greeting_step.py": {
-        "x": 0,
-        "y": 34,
+        "x": 7,
+        "y": 22,
         "sourceHandlePosition": "right"
       }
     }
@@ -21,17 +21,21 @@
   {
     "id": "cloud-janitor",
     "config": {
+      "src/events/dashboard-updater.step.ts": {
+        "x": 700,
+        "y": 198
+      },
       "src/events/auditor.step.ts": {
-        "x": 322,
-        "y": 330
+        "x": 471,
+        "y": -33
       },
       "src/cron/scanner.step.ts": {
-        "x": 1,
-        "y": 3
+        "x": 115,
+        "y": -65
       },
       "src/api/reaper.step.ts": {
-        "x": 175,
-        "y": 147
+        "x": 122,
+        "y": 165
       }
     }
   }

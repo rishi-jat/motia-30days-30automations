@@ -1,0 +1,132 @@
+
+> day-5@1.0.0 dev
+> motia dev
+
+[Redis Memory Server] Started on 127.0.0.1:63377
+➜ [REGISTERED] Flow ai-x-auto-posting registered
+➜ [REGISTERED] Step (Event) steps/tweet/05-write-result.step.ts registered
+➜ [REGISTERED] Step (Event) steps/tweet/04-post-tweet.step.ts registered
+➜ [REGISTERED] Step (Event) steps/tweet/03-select-best.step.ts registered
+➜ [REGISTERED] Step (Event) steps/tweet/02-generate-variations.step.ts registered
+➜ [REGISTERED] Step (API) steps/tweet/01-receive-idea.step.ts registered
+[motia-plugins] ✓ Validated 5 plugin(s) successfully
+ℹ [motia-plugins] Initialized with 5 plugin(s)
+ℹ [motia-plugins] Dev server configured, HMR enabled
+ℹ [motia-plugins] Watching for config file changes
+ℹ [motia-plugins] Build started
+🚀 Server ready and listening on port 3000
+🔗 Open http://localhost:3000 to open workbench 🛠️
+ℹ [motia-plugins] Injecting plugin CSS imports
+ℹ [motia-plugins] Loading plugins virtual module
+ℹ [motia-plugins] Generating plugin code...
+ℹ [motia-plugins] Plugin code generated successfully
+[2:51:55 AM] 8M8JJ-6914892 [INFO] ReceiveTweetIdea Tweet idea received
+└ idea: Just shipped my first AI tweet automation with Motia framework! 🚀
+[2:51:55 AM] 8M8JJ-6914892 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI tweet automation with Motia framework! 🚀
+[2:51:59 AM] 8M8JJ-6914892 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 404 The model `gpt-4-turbo-preview` does not exist or you do not have access to it.
+[2:52:02 AM] 8M8JJ-6914892 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI tweet automation with Motia framework! 🚀
+[2:52:07 AM] 8M8JJ-6914892 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 404 The model `gpt-4-turbo-preview` does not exist or you do not have access to it.
+[2:52:09 AM] 8M8JJ-6914892 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI tweet automation with Motia framework! 🚀
+[2:52:10 AM] 8M8JJ-6914892 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 404 The model `gpt-4-turbo-preview` does not exist or you do not have access to it.
+[2:52:12 AM] 8M8JJ-6914892 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI tweet automation with Motia framework! 🚀
+[2:52:13 AM] 8M8JJ-6914892 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 404 The model `gpt-4-turbo-preview` does not exist or you do not have access to it.
+[BullMQ] Moved failed job to DLQ: tweet.idea.received.GenerateTweetVariations.dlq {
+  topic: 'tweet.idea.received',
+  stepName: 'GenerateTweetVariations',
+  attemptsMade: 4,
+  error: 'Tweet generation failed: 404 The model `gpt-4-turbo-preview` does not exist or you do not have access to it.'
+}
+[2:54:32 AM] EV42H-7071947 [INFO] ReceiveTweetIdea Tweet idea received
+└ idea: Just shipped my first AI-powered tweet automation with Motia!
+[2:54:32 AM] EV42H-7071947 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI-powered tweet automation with Motia!
+[2:54:36 AM] EV42H-7071947 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+[2:54:38 AM] EV42H-7071947 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI-powered tweet automation with Motia!
+[2:54:44 AM] EV42H-7071947 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+[2:54:46 AM] EV42H-7071947 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI-powered tweet automation with Motia!
+[2:54:49 AM] EV42H-7071947 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+[2:54:51 AM] EV42H-7071947 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Just shipped my first AI-powered tweet automation with Motia!
+[2:54:54 AM] EV42H-7071947 [ERROR] GenerateTweetVariations AI generation failed
+└ error: Tweet generation failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+[BullMQ] Moved failed job to DLQ: tweet.idea.received.GenerateTweetVariations.dlq {
+  topic: 'tweet.idea.received',
+  stepName: 'GenerateTweetVariations',
+  attemptsMade: 4,
+  error: 'Tweet generation failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.'
+}
+[2:59:24 AM] NH3MU-7364149 [INFO] ReceiveTweetIdea Tweet idea received
+└ idea: Testing Motia automation framework for AI-powered workflows
+[2:59:25 AM] NH3MU-7364149 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Testing Motia automation framework for AI-powered workflows
+[MOCK MODE] OpenAI quota exceeded or model unavailable, using mock variations
+[2:59:28 AM] NH3MU-7364149 [INFO] GenerateTweetVariations Tweet variations generated
+└ count: 3
+[2:59:29 AM] NH3MU-7364149 [INFO] SelectBestTweet Selecting best tweet
+└ variationsCount: 3
+[2:59:29 AM] NH3MU-7364149 [INFO] SelectBestTweet Selected best tweet
+├ text: Testing Motia automation framework for AI-powered workflows 🚀
+└ length: 62
+[2:59:30 AM] NH3MU-7364149 [INFO] PostTweetToX Posting tweet to X
+└ text: Testing Motia automation framework for AI-powered workflows 🚀
+[2:59:30 AM] NH3MU-7364149 [INFO] PostTweetToX 🧪 MOCK MODE: Not posting to real X API
+[2:59:30 AM] NH3MU-7364149 [INFO] PostTweetToX Tweet posted successfully
+├ tweetId: mock-1764797370038
+├ tweetUrl: https://x.com/mock-user/status/mock-1764797370038
+└ isMock: true
+[2:59:30 AM] NH3MU-7364149 [INFO] WriteTweetResult Writing tweet result to file
+[2:59:30 AM] NH3MU-7364149 [INFO] WriteTweetResult ✅ Result written successfully
+└ filePath: ./TWEET_RESULT.md
+[3:00:40 AM] GU55P-7439077 [INFO] ReceiveTweetIdea Tweet idea received
+└ idea: Testing Motia automation framework for AI-powered workflows
+[3:00:41 AM] Y2NRM-7441034 [INFO] ReceiveTweetIdea Tweet idea received
+└ idea: Testing Motia automation framework for AI-powered workflows
+[3:00:41 AM] GU55P-7439077 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Testing Motia automation framework for AI-powered workflows
+[3:00:41 AM] GU55P-7439077 [INFO] GenerateTweetVariations Using cached tweet variations
+[3:00:42 AM] Y2NRM-7441034 [INFO] GenerateTweetVariations Generating tweet variations
+└ idea: Testing Motia automation framework for AI-powered workflows
+[3:00:42 AM] Y2NRM-7441034 [INFO] GenerateTweetVariations Using cached tweet variations
+[3:00:42 AM] GU55P-7439077 [INFO] SelectBestTweet Selecting best tweet
+└ variationsCount: 3
+[3:00:42 AM] GU55P-7439077 [INFO] SelectBestTweet Selected best tweet
+├ text: Testing Motia automation framework for AI-powered workflows 🚀
+└ length: 62
+[3:00:43 AM] Y2NRM-7441034 [INFO] SelectBestTweet Selecting best tweet
+└ variationsCount: 3
+[3:00:43 AM] Y2NRM-7441034 [INFO] SelectBestTweet Selected best tweet
+├ text: Testing Motia automation framework for AI-powered workflows 🚀
+└ length: 62
+[3:00:43 AM] GU55P-7439077 [INFO] PostTweetToX Posting tweet to X
+└ text: Testing Motia automation framework for AI-powered workflows 🚀
+[3:00:43 AM] GU55P-7439077 [INFO] PostTweetToX 🧪 MOCK MODE: Not posting to real X API
+[3:00:43 AM] GU55P-7439077 [INFO] PostTweetToX Tweet posted successfully
+├ tweetId: mock-1764797443214
+├ tweetUrl: https://x.com/mock-user/status/mock-1764797443214
+└ isMock: true
+[3:00:43 AM] Y2NRM-7441034 [INFO] PostTweetToX Posting tweet to X
+└ text: Testing Motia automation framework for AI-powered workflows 🚀
+[3:00:43 AM] Y2NRM-7441034 [INFO] PostTweetToX 🧪 MOCK MODE: Not posting to real X API
+[3:00:43 AM] Y2NRM-7441034 [INFO] PostTweetToX Tweet posted successfully
+├ tweetId: mock-1764797443778
+├ tweetUrl: https://x.com/mock-user/status/mock-1764797443778
+└ isMock: true
+[3:00:43 AM] GU55P-7439077 [INFO] WriteTweetResult Writing tweet result to file
+[3:00:43 AM] GU55P-7439077 [INFO] WriteTweetResult ✅ Result written successfully
+└ filePath: ./TWEET_RESULT.md
+[3:00:44 AM] Y2NRM-7441034 [INFO] WriteTweetResult Writing tweet result to file
+[3:00:44 AM] Y2NRM-7441034 [INFO] WriteTweetResult ✅ Result written successfully
+└ filePath: ./TWEET_RESULT.md
