@@ -23,15 +23,15 @@
     "config": {
       "src/events/auditor.step.ts": {
         "x": 322,
-        "y": 34
+        "y": 330
       },
       "src/cron/scanner.step.ts": {
-        "x": 0,
-        "y": 0
+        "x": 1,
+        "y": 3
       },
       "src/api/reaper.step.ts": {
-        "x": 137,
-        "y": 166
+        "x": 175,
+        "y": 147
       }
     }
   }
