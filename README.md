@@ -18,6 +18,8 @@ This repo is my daily log of what I build, what breaks, and what I learn along t
 | **4** | [AI Issue Explainer](./Day-4) | Turning GitHub issues into step-by-step fix guides using repo scanning + LLMs. | Shipped |
 | **5** | [AI X Auto‑Poster](./Day-5) | End‑to‑end tweet automation: idea → variations → best pick → X post → result file. | Shipped |
 | **6** | [AI Log Analyzer](./Day-6) | Turning messy error logs into structured incident reports with LLM analysis. | Shipped |
+| **7** | [AI Release Notes Generator](./Day-7) | Converting raw GitHub commits into structured, human-readable release notes with safe fallbacks. | Shipped |
+| **8** | [CloudJanitor – Idle Resource Detector](./Day-8) | Detecting low-utilization cloud resources and generating human-approved cleanup recommendations to reduce cost. | Shipped |
 | ... | | | |
 | **30** | Finale | — | Upcoming |
 
@@ -79,6 +81,30 @@ The workflow receives raw logs via API, sanitizes them, extracts errors and stac
 Includes a fallback analyzer when LLM is unavailable — no excuses for missing reports.
 
 **Tech:** Log parsing, regex extraction, LLM analysis, markdown report generation.
+
+---
+
+## Day 7: AI Release Notes Generator
+
+Day 7 focuses on automating one of the most repetitive release tasks: writing release notes.
+
+The workflow pulls commits from GitHub, analyzes commit messages, and groups changes into features, fixes, and breaking updates.  
+When commit data is inconsistent or insufficient, it safely falls back to a plain commit list to avoid blocking releases.
+
+**Tech:** GitHub commits API, change classification logic, deterministic grouping with fallback generation.
+
+---
+
+## Day 8: CloudJanitor – Idle Resource Detector (FinOps)
+
+Day 8 shifts focus from code to infrastructure cost control.
+
+This workflow scans cloud-like resource inventories on a schedule, detects low-utilization resources using deterministic rules, enriches them with ownership and tag context, and generates cleanup recommendations.  
+All destructive actions are gated behind explicit human approval, with simulated termination used by default.
+
+The goal is to surface waste early and make cost-saving decisions visible and auditable.
+
+**Tech:** Cron scheduling, utilization analysis, AI-assisted recommendations, human-in-the-loop approval, stateful event pipelines.
 
 ---
 
